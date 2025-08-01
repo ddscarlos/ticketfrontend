@@ -5,46 +5,58 @@
   </div>
 </div>
 
-<header>
-  <a href="#">CORREO ELECTRÓNICO</a>
-  <a href="#">PORTAL DE TRANSPARENCIA</a>
-  <a href="#">PÁGINA WEB</a>
-  <a href="#">BOLETÍN INFORMATIVO</a>
-  <a href="#">INTRANET</a>
-  <a href="#">MESA DE AYUDA</a>
- </header>
- <main class="main-section">
-  <div class="login-container">
-   <img alt="Llamkasun Perú Logo" src="assets/images/logo_llp.png" class="img-fluid" style="width: 70%;"/>
-   <h2>Casos de Prueba</h2>
-   <form>
-    <div class="input-group">
-     <i class="fas fa-user"></i>
-     <input [(ngModel)]="loging" name="loging" id="loging" placeholder="Usuario (sin @llamkasunperu.gob.pe)" type="text">
+<section class="auth-page-wrapper-2 py-4 position-relative d-flex align-items-center justify-content-center min-vh-100 bg-light">
+    <div class="container">
+        <div class="row g-0">
+            <div class="col-lg-5">
+                <div class="auth-card card bg-primary h-100 rounded-0 rounded-start border-0 d-flex align-items-center justify-content-center overflow-hidden p-4">
+                    <div class="auth-image">
+                        <img src="assets/images/logo-light-full.png" alt="" height="42" />
+                        <img src="assets/images/effect-pattern/auth-effect-2.png" alt="" class="auth-effect-2" />
+                        <img src="assets/images/effect-pattern/auth-effect.png" alt="" class="auth-effect" />
+                        <img src="assets/images/effect-pattern/auth-effect.png" alt="" class="auth-effect" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="card mb-0 rounded-0 rounded-end border-0">
+                    <div class="card-body p-4 p-sm-5 m-lg-4">
+                        <div class="text-center mt-2">
+                            <h5 class="text-primary fs-22"><b>SISTEMA DE MESA DE AYUDA</b></h5>
+                            <p class="text-muted">Inicia sesión para continuar</p>
+                        </div>
+                        <div class="p-2 mt-5">
+                            <form action="https://themesbrand.com/hybrix/html/index.html">
+
+                                <div class="mb-3">
+                                    <label for="loging" class="form-label">Usuario</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon1"><i class="ri-user-3-line"></i></span>
+                                        <input type="text" class="form-control" [(ngModel)]="loging" name="loging" id="loging" placeholder="Usuario (sin @llamkasunperu.gob.pe)">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="passwd">Contraseña</label>
+                                    <div class="position-relative auth-pass-inputgroup overflow-hidden">
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="basic-addon1"><i class="ri-lock-2-line"></i></span>
+                                            <input type="password" class="form-control pe-5 password-input" [(ngModel)]="passwd" name="passwd" id="passwd" placeholder="Contraseña actual">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4">
+                                    <button class="btn btn-primary w-100" type="submit" (click)="IniciarSesion()">Iniciar Sesión</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                    <!-- end card body -->
+                </div>
+                <!-- end card -->
+            </div>
+        </div>
     </div>
-    <div class="input-group">
-     <i class="fas fa-lock"></i>
-     <input [(ngModel)]="passwd" name="passwd" id="passwd" placeholder="Contraseña actual" type="password">
-    </div>
-    <button type="submit" (click)="IniciarSesion()">Iniciar Sesión</button>
-   </form>
-   <p class="pt-2"> Creado con <span> ❤ </span> Por El Equipo de UFTI</p>
-  </div>
-  <div class="reminder-container">
-   <img alt="Illustration of people discussing values" src="assets/images/login/slider1.png" class="img-fluid"/>
-  </div>
- </main>
- <!-- Footer -->
- <footer>
-  <div class="footer-container">
-   <div class="footer-section">
-    <h3>LLAMKASUN PERÚ</h3>
-    <p>Programa de empleo temporal.</p>
-   </div>
-   <div class="footer-section">
-    <h3>CONTÁCTENOS</h3>
-    <p><i class="fas fa-map-marker-alt"></i>Av. Salaverry 655, Piso 7</p>
-    <p><i class="fas fa-phone"></i>(01) 200-2940 / 0-800-10035</p>
-   </div>
-  </div>
- </footer>
+</section>

@@ -51,12 +51,12 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('usuario', res.user.id);
 
         const datausuario = {
+          p_age_id: 0,
           p_usu_id: res.user.id,
           p_usu_apepat: '',
           p_usu_apemat: '',
           p_usu_nombre: '',
-          p_usu_loging: '',
-          p_usu_activo: 9,
+          p_age_activo: 1,
         };
 
         this.api.getDatosUsuario(datausuario).subscribe({
@@ -67,12 +67,22 @@ export class LoginComponent implements OnInit {
               return;
             }
 
+            localStorage.setItem('age_id', datos[0].age_id);
             localStorage.setItem('usu_apepat', datos[0].usu_apepat);
             localStorage.setItem('usu_apemat', datos[0].usu_apemat);
             localStorage.setItem('usu_nombre', datos[0].usu_nombre);
             localStorage.setItem('usu_nomcom', datos[0].usu_nomcom);
-            localStorage.setItem('eqc_id', datos[0].eqc_id);
-            localStorage.setItem('eqt_id', datos[0].eqt_id);
+            localStorage.setItem('equ_id', datos[0].equ_id);
+            localStorage.setItem('usu_chkadm', datos[0].usu_chkadm);
+            localStorage.setItem('age_chkall', datos[0].age_chkall);
+            
+            const dataMenu = {
+              p_usu_id: res.user.id,
+            };
+
+            this.api.getSeguridadpermisoobjetosel(dataMenu).subscribe((datosMenu: any) => {
+              localStorage.setItem('objetosMenu', JSON.stringify(datosMenu));
+            });
 
             this.loading = false;
 

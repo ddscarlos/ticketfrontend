@@ -144,23 +144,7 @@ export class ModalColaboradorComponent implements OnInit {
       p_col_apepat: this.p_col_apepat,
       p_col_apemat: this.p_col_apemat
     };
-
-    this.api.getColaboradorSel(data_post).subscribe((data: any) => {
-      if (data.length != 0) {
-        this.dataColaboradores = data;
-        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-          dtInstance.destroy();
-          this.dtTrigger.next();
-        });
-        // btnExportaExcel.disabled = false;
-      } else {
-        this.dataColaboradores = [];
-        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-          dtInstance.destroy();
-          this.dtTrigger.next();
-        });
-      }
-    });
+    
   }
 
   SeleccionarColaborador(col_id: number, col_nombre: string) {

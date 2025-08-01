@@ -21,17 +21,12 @@ import { NgxPrintModule } from "ngx-print";
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { DatePipe } from '@angular/common';
 import { ModalColaboradorComponent } from './components/modal-colaborador/modal-colaborador.component';
-import { EscenariosComponent } from './pages/escenarios/escenarios.component';
-import { CasosComponent } from './pages/casos/casos.component';
-import { CasosInsComponent } from './pages/casos-ins/casos-ins.component'
 import { QuillModule } from 'ngx-quill';
-import { EscenariosInsComponent } from './pages/escenarios-ins/escenarios-ins.component';
-import { ModalEscenarioComponent } from './components/modal-escenario/modal-escenario.component';
-import { ResultadosCasoComponent } from './pages/resultados-caso/resultados-caso.component';
-import { ModalResultadoComponent } from './components/modal-resultado/modal-resultado.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from "./guards/auth";
 import { ExampleComponent } from './pages/example/example.component';
+import { TicketComponent } from './pages/ticket/ticket.component';
+import { ReporteComponent } from './pages/reporte/reporte.component';
 
 @NgModule({
   declarations: [
@@ -41,14 +36,9 @@ import { ExampleComponent } from './pages/example/example.component';
     LoginComponent,
     DashboardComponent,
     ModalColaboradorComponent,
-    EscenariosComponent,
-    CasosComponent,
-    CasosInsComponent,
-    EscenariosInsComponent,
-    ModalEscenarioComponent,
-    ResultadosCasoComponent,
-    ModalResultadoComponent,
-    ExampleComponent
+    ExampleComponent,
+    TicketComponent,
+    ReporteComponent
   ],
   imports: [
     BrowserModule,
