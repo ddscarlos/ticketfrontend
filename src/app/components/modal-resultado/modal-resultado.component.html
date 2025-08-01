@@ -1,0 +1,88 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left"> <i class="pe-7s-plus btn-icon-wrapper"> </i> {{titulopant}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="onCancelar()" id="closeModal">
+      <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="main-card mb-3 card">
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="ecp_id">Estado Caso Prueba: </label>
+                                <ng-select class="mayus" [(ngModel)]="ecp_id" [disabled]="inputsDisabled" (change)="loadEstadoCasoPruebaTraza();">
+                                    <ng-option value="0">Seleccionar</ng-option>
+                                    <ng-option *ngFor="let item of dataCasoPrueba" [value]="item.ecp_id">{{item.ecp_descri}}</ng-option>
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="col-md-6" *ngIf="showconError">
+                            <div class="position-relative form-group">
+                                <label for="cct_id">Criticidad: </label>
+                                <ng-select class="mayus" [(ngModel)]="cct_id" [disabled]="inputsDisabled">
+                                    <ng-option value="0">Seleccionar</ng-option>
+                                    <ng-option *ngFor="let item of dataCriticidad" [value]="item.cct_id">{{item.cct_descri}}</ng-option>
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="col-md-6" *ngIf="showAprobado">
+                            <div class="position-relative form-group">
+                                <label for="cpt_fecapr">Fecha Aprobación: </label>
+                                <input name="cpt_fecapr" id="cpt_fecapr" [(ngModel)]="cpt_fecapr" type="date" class="form-control" ng-pattern="/^[a-zA-Z]*$/" oninput="this.value = this.value.toUpperCase()" [disabled]="inputsDisabled">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12" *ngIf="showconError">
+                            <div class="position-relative form-group">
+                                <label for="cpt_caurai">Causa Raiz: </label>
+                                <input name="cpt_caurai" id="cpt_caurai" [(ngModel)]="cpt_caurai" type="text" class="form-control" ng-pattern="/^[a-zA-Z]*$/" oninput="this.value = this.value.toUpperCase()" [disabled]="inputsDisabled">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6" *ngIf="showconError">
+                            <div class="position-relative form-group">
+                                <label for="cpt_fecdet">Fecha Detección: </label>
+                                <input name="cpt_fecdet" id="cpt_fecdet" type="date" [(ngModel)]="cpt_fecdet" class="form-control" ng-pattern="/^[a-zA-Z]*$/" oninput="this.value = this.value.toUpperCase()" [disabled]="inputsDisabled">
+                            </div>
+                        </div>
+                        <div class="col-md-6" *ngIf="showconError">
+                            <div class="position-relative form-group">
+                                <label for="cpt_feccor">Fecha Corrección: </label>
+                                <input name="cpt_feccor" id="cpt_feccor" [(ngModel)]="cpt_feccor" type="date" class="form-control" ng-pattern="/^[a-zA-Z]*$/" oninput="this.value = this.value.toUpperCase()" [disabled]="inputsDisabled || btnShowNuevoFechaCorrec">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="cpt_resobt">Resultados Obtenidos: </label>
+                                <textarea name="cpt_resobt" id="cpt_resobt" [(ngModel)]="cpt_resobt" class="form-control" ng-pattern="/^[a-zA-Z]*$/" oninput="this.value = this.value.toUpperCase()" [disabled]="inputsDisabled"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="cpt_observ">Observaciones: </label>
+                                <textarea name="cpt_observ" id="cpt_observ" [(ngModel)]="cpt_observ" class="form-control" ng-pattern="/^[a-zA-Z]*$/" oninput="this.value = this.value.toUpperCase()" [disabled]="inputsDisabled"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <p class="text-right">
+                                <button *ngIf="modo === 'editar' || modo === 'nuevo'" class="mb-2 mr-2 btn-icon btn btn-success" id="Grabar" (click)="ProcesarRegistro()"><i class="pe-7s-upload btn-icon-wrapper"></i>Guardar datos</button>
+                                <button class="mb-2 mr-2 btn-icon btn btn-danger" id="Cancelar" (click)="onCancelar()"><i class="pe-7s-trash btn-icon-wrapper"></i>Cancelar</button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

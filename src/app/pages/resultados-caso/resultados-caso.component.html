@@ -1,0 +1,110 @@
+<!-- SPINNER OVERLAY GENERAL -->
+<div *ngIf="loading" class="loading-overlay">
+  <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+    <span class="sr-only">Cargando...</span>
+  </div>
+</div>
+<div class="app-main__outer">
+    <div class="app-main__inner">
+        <div class="app-page-title">
+            <div class="page-title-wrapper" style="display: block;">
+                <div class="page-title-heading">
+                    <div class="page-title-icon">
+                        <i class="{{icono}}" style="color:#2C3180;"></i>
+                    </div>
+                    <div>{{titulopant}} : {{text_caso}}</div>
+                    <div class="page-title-actions">
+                        <div class="d-inline-block dropdown">
+                            <button *ngIf="btnshowadd" type="button" class="btn-shadow btn btn-info" (click)="agregarNuevoResultado()" title="AGREGAR RESULTADO">
+                                <span class="btn-icon-wrapper pr-2 opacity-7">
+                                    <i class="fa fa-plus fa-w-20"></i>
+                                </span>
+                                AGREGAR RESULTADO
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane tabs-animation fade show active" id="tab-content-0" role="tabpanel">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="main-card mb-3 card">
+                        <div class="card-body" id="tablaProceso">
+                            <div class="form-row">
+                                <h5 class="card-title">&nbsp;Resultados de Busqueda &nbsp; <span id="busquedaTables" style="display: none;"><i class="fa fa-spinner fa-pulse fa-fw"></i></span></h5>
+                                <div class="col-md-11">
+                                    <div class="position-relative form-group">
+                                        <label for="cpt_activo">ESTADO REGISTRO: </label>
+                                        <ng-select class="mayus" [(ngModel)]="cpt_activo">
+                                            <ng-option value="9" selected>TODOS</ng-option>
+                                            <ng-option value="1">ACTIVOS</ng-option>
+                                            <ng-option value="0">ANULADOS</ng-option>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="col-md-1" style="bottom: -29px;">
+                                    <p class="text-left" style="margin-bottom: 0px;">
+                                        <button class="mb-2 mr-2 btn-icon btn btn-outline-primary btn-block" id="buscar" (click)="loadDataProceso()"><i class="pe-7s-search btn-icon-wrapper"></i>Buscar</button>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="table-responsive" id="tablaDataProceso">
+                                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered dataTable_width_auto">
+                                    <thead>
+                                        <tr style="text-align: center;">
+                                            <th>RESULTADO</th>
+                                            <th>FECHA RESULTADO</th>
+                                            <th>OBSERVACIONES</th>
+                                            <th>REGISTRO</th>
+                                            <th>ACCIONES</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of dataResultados" style="text-align: center;">
+                                            <td>{{item.ecp_descri}}</td>
+                                            <td>{{item.cpt_fecres}}</td>
+                                            <td>{{item.cpt_observ}}</td>
+                                            <td>{{item.cpt_estado}}</td>
+                                            <td>
+                                                <button *ngIf="item.cpt_botver == 1" class="btn btn-icon btn-xs text-white bg-success mr-1 ml-1" (click)="verResultadoDetalle(item.cpt_id)" title="Visualizar"><i class="pe-7s-look"> </i></button>
+                                                <button *ngIf="item.cpt_botedt == 1" class="btn btn-icon btn-xs text-white bg-primary mr-1 ml-1" (click)="EditarTraza(item.cpt_id)" title="Editar"><i class="pe-7s-pen"> </i></button>
+                                                <button *ngIf="item.cpt_botanu == 1" class="btn btn-icon btn-xs text-white bg-danger" title="Anular" (click)="ChangeEstadoTraza(item.cpt_id,item.cpt_activo)"><i class="pe-7s-power"> </i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="app-wrapper-footer">
+        <div class="app-footer">
+            <div class="app-footer__inner">
+                <div class="app-footer-right">
+                    <ul class="header-megamenu nav">
+                        <li class="nav-item">
+                            <p style="margin: 0px">Llamkasun Perú &copy; 2025</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #OpenModalResultadoBuscar>
+    <app-modal-resultado 
+        [cptId]="sel_cpt_id" 
+        [capId]="cap_id" 
+        [modo]="modoModal"
+        (seleccionarResultado)="onResultadoSeleccionado($event)" 
+        (cancelClicked)="onCancelar()" 
+        (registroGuardado)="onRegistroGuardado()">
+    </app-modal-resultado>
+</ng-template>

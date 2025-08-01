@@ -1,0 +1,186 @@
+<!-- SPINNER OVERLAY GENERAL -->
+<div *ngIf="loading" class="loading-overlay">
+  <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+    <span class="sr-only">Cargando...</span>
+  </div>
+</div>
+
+<div class="app-main__outer">
+    <div class="app-main__inner">
+        <div class="app-page-title">
+            <div class="page-title-wrapper">
+                <div class="page-title-heading">
+                    <div class="page-title-icon">
+                        <i class="{{icono}}" style="color:#2C3180;"></i>
+                    </div>
+                    <div>{{titulopant}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane tabs-animation fade show active" id="tab-content-0" role="tabpanel">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="main-card mb-2 card" style="padding: 12px;">
+                        <div class="form-row">
+                            <div class="col-md-2">
+                                <div class="position-relative form-group">
+                                    <label for="tdr_id">Escenario: </label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control-sm form-control" id="esp_nombre" [(ngModel)]="esp_nombre" style="height: 36px;" disabled>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary btn-sm" (click)="openModalShow(OpenModalEscenarioBuscar, 'modal-xl')" title="OBTENER ESCENARIO"><i class="pe-7s-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="position-relative form-group">
+                                    <label for="esp_fecini">Fecha Inicio Escenario: </label>
+                                    <input name="esp_fecini" id="esp_fecini" type="date" [(ngModel)]="esp_fecini" class="form-control" ng-pattern="/^[a-zA-Z]*$/" oninput="this.value = this.value.toUpperCase()" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="position-relative form-group">
+                                    <label for="esp_fecfin">Fecha Fin Escenario: </label>
+                                    <input name="esp_fecfin" id="esp_fecfin" type="date" [(ngModel)]="esp_fecfin" class="form-control" ng-pattern="/^[a-zA-Z]*$/" oninput="this.value = this.value.toUpperCase()" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="position-relative form-group">
+                                    <label for="eqc_id">Equipo QA: </label>
+                                    <ng-select class="mayus" [(ngModel)]="eqc_id">
+                                        <ng-option value="0">Seleccionar Equipo QA</ng-option>
+                                        <ng-option *ngFor="let item of dataEquipoCalidad" [value]="item.eqc_id">{{item.eqc_nomcom}}</ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <!-- <div class="col-md-6">
+                                <div class="position-relative form-group">
+                                    <label for="colab_nombre">Colaborador: </label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control-sm form-control" id="colab_nombre" style="height: 36px;" [(ngModel)]="colab_nombre" disabled>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary btn-sm" (click)="openModalShow(OpenModalColaboradorBuscar, 'modal-xl')" title="OBTENER COLABORADOR" [disabled]="inputDisabled"><i class="pe-7s-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-4">
+                                <div class="position-relative form-group">
+                                    <label for="tip_id">Tipo: </label>
+                                    <ng-select class="mayus" [(ngModel)]="tip_id" [disabled]="inputDisabled">
+                                        <ng-option value="0">Seleccionar Tipo</ng-option>
+                                        <ng-option *ngFor="let item of dataTipoPrueba" [value]="item.tip_id">{{item.tip_descri}}</ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="position-relative form-group">
+                                    <label for="cap_fecini">Fecha Inicio: </label>
+                                    <input name="cap_fecini" id="cap_fecini" type="date" [(ngModel)]="cap_fecini" class="form-control" ng-pattern="/^[a-zA-Z]*$/" oninput="this.value = this.value.toUpperCase()" [disabled]="inputDisabled">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="position-relative form-group">
+                                    <label for="cap_fecfin">Fecha Cierre: </label>
+                                    <input name="cap_fecfin" id="cap_fecfin" type="date" [(ngModel)]="cap_fecfin" class="form-control" ng-pattern="/^[a-zA-Z]*$/" oninput="this.value = this.value.toUpperCase()" [disabled]="inputDisabled">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="position-relative form-group">
+                                    <label for="cap_nombre">Nombres: </label>
+                                    <input name="cap_nombre" id="cap_nombre" [(ngModel)]="cap_nombre" type="text" class="form-control" ng-pattern="/^[a-zA-Z]*$/" oninput="this.value = this.value.toUpperCase()" [disabled]="inputDisabled">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <div class="position-relative form-group">
+                                    <label for="cap_descri">Descripción: </label>
+                                    <quill-editor [(ngModel)]="cap_descri" [style]="{height: '150px'}" [readOnly]="inputDisabled"></quill-editor>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="position-relative form-group">
+                                    <label for="cap_requis">Requisitos: </label>
+                                    <quill-editor [(ngModel)]="cap_requis" [style]="{height: '150px'}" [readOnly]="inputDisabled"></quill-editor>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <div class="position-relative form-group">
+                                    <label for="cap_datent">Datos entrantes: </label>
+                                    <quill-editor [(ngModel)]="cap_datent" [style]="{height: '150px'}" [readOnly]="inputDisabled"></quill-editor>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="position-relative form-group">
+                                    <label for="cap_paseje">Pasos a Ejecutar: </label>
+                                    <quill-editor [(ngModel)]="cap_paseje" [style]="{height: '150px'}" [readOnly]="inputDisabled"></quill-editor>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <div class="position-relative form-group">
+                                    <label for="cap_resesp">Resultados Esperados: </label>
+                                    <textarea name="cap_resesp" id="cap_resesp" [(ngModel)]="cap_resesp" class="form-control" ng-pattern="/^[a-zA-Z]*$/" oninput="this.value = this.value.toUpperCase()" [disabled]="inputDisabled" style="height: 100px;max-height: 100px; overflow: auto; resize: none;"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="position-relative form-group">
+                                    <label for="cap_resobt">Resultados Obtenidos: </label>
+                                    <textarea name="cap_resobt" id="cap_resobt" [(ngModel)]="cap_resobt" class="form-control" ng-pattern="/^[a-zA-Z]*$/" oninput="this.value = this.value.toUpperCase()" [disabled]="inputDisabled" style="height: 100px;max-height: 100px; overflow: auto; resize: none;"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="position-relative form-group">
+                                    <label for="cap_observ">Observaciones: </label>
+                                    <textarea name="cap_observ" id="cap_observ" [(ngModel)]="cap_observ" class="form-control" ng-pattern="/^[a-zA-Z]*$/" oninput="this.value = this.value.toUpperCase()" [disabled]="inputDisabled"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row pt-2">
+                            <div class="col-md-12">
+                                <p class="text-right">
+                                    <button class="mb-2 mr-2 btn-icon btn btn-success" id="Grabar" (click)="procesaRegistro()" [disabled]="inputDisabled"><i class="pe-7s-plus btn-icon-wrapper"></i>Guardar</button>
+                                    <button class="mb-2 mr-2 btn-icon btn btn-danger" id="Cancelar" [routerLink]="['/casos']"><i class="pe-7s-trash btn-icon-wrapper"></i>Cancelar</button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="app-wrapper-footer">
+        <div class="app-footer">
+            <div class="app-footer__inner">
+                <div class="app-footer-right">
+                    <ul class="header-megamenu nav">
+                        <li class="nav-item">
+                            <p style="margin: 0px">Llamkasun Perú &copy; 2025</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #OpenModalColaboradorBuscar>
+    <app-modal-colaborador (seleccionarColaborador)="onColaboradorSeleccionado($event)" (cancelClicked)="onCancelar()"></app-modal-colaborador>
+</ng-template>
+
+<ng-template #OpenModalEscenarioBuscar>
+    <app-modal-escenario (seleccionarEscenario)="onEscenarioSeleccionado($event)" (cancelClicked)="onCancelar()"></app-modal-escenario>
+</ng-template>
