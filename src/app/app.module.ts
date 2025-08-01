@@ -62,7 +62,7 @@ import { ExampleComponent } from './pages/example/example.component';
     TreeviewModule.forRoot(),
     ModalModule.forRoot(),
     AgmCoreModule.forRoot({
-      apiKey: "AIzaSyD5vGKR2yl1fnF1aT6tn-gPxPANhSBBg8Q",
+      apiKey: "",
       libraries: ["places"],
     }),
     RouterModule.forRoot(ROUTES, { useHash: false }),
