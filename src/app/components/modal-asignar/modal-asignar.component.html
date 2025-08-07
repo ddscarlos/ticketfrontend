@@ -1,0 +1,45 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">{{titulopant}}</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="cancelar()"></button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xl-12 col-md-12">
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title bg-warning-subtle rounded fs-3">
+                            <i class="ri-ticket-2-line text-warning"></i>
+                        </span>
+                    </div>
+                    <div class="text-end flex-grow-1">
+                        <p class="text-uppercase fw-medium text-muted text-truncate fs-13 mb-0"><b>TICKET :</b> # {{ ticket?.tkt_numero}}</p>
+                        <p class="text-uppercase fw-medium text-muted text-truncate fs-13 mb-0"><b>FECHA :</b> {{ ticket?.tkt_fectkt}}</p>
+                        <p class="text-uppercase fw-medium text-muted text-truncate fs-13 mb-0"><b>HORA :</b> {{ ticket?.tkt_hortkt}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-12 col-md-12 mb-3">
+        <div>
+            <label for="age_id" class="form-label">AGENTE</label>
+            <ng-select class="mayus" [(ngModel)]="age_id">
+                <ng-option value="0">Seleccionar Agente</ng-option>
+                <ng-option *ngFor="let item of dataAgente" [value]="item.age_id">{{item.usu_nomcom}}</ng-option>
+            </ng-select>
+        </div>
+    </div>
+    <div class="col-xl-12 col-md-12">
+        <div>
+            <label for="tkt_obsasg" class="form-label">OBSERVACIONES</label>
+            <textarea name="tkt_obsasg" id="tkt_obsasg" [(ngModel)]="tkt_obsasg" class="form-control" ng-pattern="/^[a-zA-Z]*$/" oninput="this.value = this.value.toUpperCase()" rows="6"></textarea>
+        </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-success btn-sm" (click)="ProcesarRegistro()"><i class="bx bx-power-off"></i> ASIGNAR TICKET</button>
+  <button class="btn btn-danger btn-sm" (click)="cancelar()"><i class="bx bx-log-in"></i> CANCELAR</button>
+</div>

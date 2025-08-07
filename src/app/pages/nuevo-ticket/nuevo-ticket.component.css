@@ -13,7 +13,7 @@ table.dataTable tbody th, table.dataTable tbody td {
     padding: 2px 10px;
 }
 tr {
-    font-size: 12px;
+    font-size: 13px;
 }
 .ng-select .ng-select-container {
     min-height: 30px;
@@ -23,20 +23,6 @@ tr {
     min-height: 30px;
     height: 30px;
 }
-
-table.dataTable a {
-    color: rgb(0 0 0);
-}
-
-#tablaDataProceso {
-  overflow: visible !important;
-}
-
-.dropdown {
-  position: relative;
-}
-
-.dropdown-menu {
-  z-index: 1050 !important;
-  position: absolute !important;
+::ng-deep .mayus-editor .ql-editor {
+  text-transform: uppercase;
 }

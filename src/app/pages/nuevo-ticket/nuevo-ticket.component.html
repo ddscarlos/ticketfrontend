@@ -1,0 +1,97 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+        <h4 class="mb-sm-0">{{titulopant}}</h4>
+        <div class="page-title-right">
+          <ol class="breadcrumb m-0">
+            <li class="breadcrumb-item">
+              <a href="javascript: void(0);">Inicio</a>
+            </li>
+            <li class="breadcrumb-item active">{{titulopant}}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-xxl-6 col-md-6">
+              <div>
+                <label for="tkt_asunto" class="form-label">ASUNTO</label>
+                <input type="text" class="form-control form-control-sm" placeholder="Ingrese asunto del ticket" id="tkt_asunto" [(ngModel)]="tkt_asunto" ng-pattern="/^[a-zA-Z]*$/" oninput="this.value = this.value.toUpperCase()">
+              </div>
+            </div>
+            <div class="col-xxl-6 col-md-6">
+              <div>
+                <label for="tea_id" class="form-label">TEMA DE AYUDA</label>
+                <ng-select class="mayus" [(ngModel)]="tea_id">
+                    <ng-option value="0">Seleccionar Tema de Ayuda</ng-option>
+                    <ng-option *ngFor="let item of dataTemaAyuda" [value]="item.tea_id">{{item.tea_descri}}</ng-option>
+                </ng-select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xxl-6 col-md-6">
+              <div>
+                <label for="ori_id" class="form-label">ORIGEN</label>
+                <ng-select class="mayus" [(ngModel)]="ori_id">
+                    <ng-option value="0">Seleccionar Origen</ng-option>
+                    <ng-option *ngFor="let item of dataOrigen" [value]="item.ori_id">{{item.ori_descri}}</ng-option>
+                </ng-select>
+              </div>
+            </div>
+            <div class="col-xxl-6 col-md-6">
+              <div>
+                <label for="tkt_numcel" class="form-label">NÚMERO DE CELULAR</label>
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text" id="tkt_numcel"><i class="ri-phone-fill"></i></span>
+                    <input type="text" class="form-control" placeholder="00000" id="tkt_numcel" [(ngModel)]="tkt_numcel" (keypress)="restrictNumeric($event)">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xxl-12 col-md-6">
+              <div>
+                <label for="tkt_observ" class="form-label">OBSERVACIONES</label>
+                <quill-editor [(ngModel)]="tkt_observ" [style]="{height: '150px'}" [readOnly]="inputDisabled" class="mayus-editor"></quill-editor>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xxl-12 col-md-6">
+              <div>
+                <label class="form-label"><strong>Adjuntar Archivos</strong></label>
+                <ngx-dropzone (change)="onSelect($event)" accept="image/jpeg,image/jpg,image/png,image/gif">
+                <ngx-dropzone-label>Arrastra tus archivos o haz clic para seleccionar</ngx-dropzone-label>
+
+                <ngx-dropzone-image-preview
+                    ngProjectAs="ngx-dropzone-preview"
+                    *ngFor="let f of files"
+                    [file]="f"
+                    [removable]="true"
+                    (removed)="onRemove(f)">
+                    <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                </ngx-dropzone-image-preview>
+                </ngx-dropzone>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xxl-12 col-md-6">
+                <p class="text-right d-flex" style="justify-content: end;">
+                    <button class="mb-2 mr-2 btn btn-success btn-sm text-white d-flex justify-content-center align-items-center gap-1" id="Grabar" (click)="procesaRegistro()"><i class="ri-save-3-line"></i> Generar Ticket</button>
+                    <button class="mb-2 mr-2 btn btn-danger btn-sm text-white d-flex justify-content-center align-items-center gap-1" id="Cancelar" [routerLink]="['/incidencia']"><i class="ri-logout-box-line"></i> Cancelar</button>
+                </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

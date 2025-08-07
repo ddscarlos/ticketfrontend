@@ -1,5 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component,TemplateRef,OnInit,Input,ViewChild} from "@angular/core";
 import { Router } from '@angular/router';
+import { AppComponent } from 'src/app/app.component';
+import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
+import { ApiService } from "src/app/services/api.service";
+import { DataTableDirective } from "angular-datatables";
+import { Subject } from "rxjs";
+import { analyzeAndValidateNgModules } from "@angular/compiler";
+import swal from "sweetalert2";
+
 
 @Component({
   selector: 'app-ticket',
@@ -7,15 +15,206 @@ import { Router } from '@angular/router';
   styleUrls: ['./ticket.component.css']
 })
 export class TicketComponent implements OnInit {
+  titulopant : string = "Tickets";
+  icono : string = "pe-7s-next-2";
+  loading: boolean = false;
+  exportarHabilitado: boolean = false;
+  modalRef?: BsModalRef;
+  selectedTicket: any;
+
   ObjetoMenu: any[] = [];
   ruta: string = '';
   objid : number = 0 ;
+
+  //INICIO PARAMETROS
+  dataTicket:any;
+  dataEstado:any;
+  dataPrioridad:any;
+  dataTemaAyuda:any;
+
+  tkt_id: string = '';
+  tkt_numero: string = '';
+  est_id: string = '';
+  tea_id: string = '';
+  pri_id: string = '';
+  equ_id: string = '';
+  age_id: string = '';
+  usu_id: string = '';
+  ori_id: string = '';
+  sed_id: string = '';
+  ard_id: string = '';
+  tkt_fecini:string='';
+  tkt_fecfin:string='';
+  tkt_activo: string = '';
+  //FIN DE PARAMETROS
+
+  @ViewChild('OpenModalEditarTicket', { static: false }) OpenModalEditarTicket!: TemplateRef<any>;
+  @ViewChild('OpenModalAnularTicket', { static: false }) OpenModalAnularTicket!: TemplateRef<any>;
+  @ViewChild('OpenModalVerTicket', { static: false }) OpenModalVerTicket!: TemplateRef<any>;
+  @ViewChild('OpenModalValidarTicket', { static: false }) OpenModalValidarTicket!: TemplateRef<any>;
+  @ViewChild('OpenModalAsignarTicket', { static: false }) OpenModalAsignarTicket!: TemplateRef<any>;
+  @ViewChild('OpenModalAtencionTicket', { static: false }) OpenModalAtencionTicket!: TemplateRef<any>;
+  @ViewChild('OpenModalResponderTicket', { static: false }) OpenModalResponderTicket!: TemplateRef<any>;
+  @ViewChild('OpenModalCerrarTicket', { static: false }) OpenModalCerrarTicket!: TemplateRef<any>;
+  @ViewChild('OpenModalTrazabilidadTicket', { static: false }) OpenModalTrazabilidadTicket!: TemplateRef<any>;
+
+  @ViewChild(DataTableDirective, { static: false })
+  dtElement: DataTableDirective;
+  isDtInitialized: boolean = false;
+
+  rowSelected : any;
+  dataanteriorseleccionada : any;
   
-  constructor(private router: Router) {}
+  dtTrigger: Subject<any> = new Subject<any>();
+  dtOptions: any = {
+    pagingType: "full_numbers",
+    pageLength: 10,
+    dom: "Bfrtip",
+    buttons: ["excel"],
+    select: true,
+    responsive: true,
+    autoWidth: false,
+    searching: true,
+    columnDefs: [
+      { width: "10px", targets: 0 },
+      { width: "100px", targets: 1 },
+      { width: "500px", targets: 2 },
+      { width: "100px", targets: 3 },
+      { width: "50px", targets: 4 },
+      { width: "20px", targets: 5 },
+      { width: "20px", targets: 6 },
+      { width: "20px", targets: 7 },
+    ],
+    rowCallback: (row: Node, data: any[] | Object, index: number) => {
+      const self = this;
+      $("td", row).off("click");
+      $("td", row).on("click", () => {
+        this.rowSelected = data;
+        if (this.rowSelected !== this.dataanteriorseleccionada) {
+          this.dataanteriorseleccionada = this.rowSelected;
+        } else {
+          this.dataanteriorseleccionada = [];
+        }
+
+        const anular = document.getElementById('anular') as HTMLButtonElement | null;
+        if (anular) {
+          anular.disabled = false;
+        }
+      });
+      return row;
+    },
+    language: {
+      processing: "Procesando...",
+      search: "Buscar:",
+      lengthMenu: "Mostrar _MENU_ elementos",
+      info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+      infoEmpty: "Mostrando ningún elemento.",
+      infoFiltered: "(filtrado _MAX_ elementos total)",
+      loadingRecords: "Cargando registros...",
+      zeroRecords: "No se encontraron registros",
+      emptyTable: "No hay datos disponibles en la tabla",
+      select: {
+        rows: {
+          _: "%d filas seleccionadas",
+          0: "Haga clic en una fila para seleccionarla",
+          1: "Ticket seleccionado",
+        },
+      },
+      paginate: {
+        first: "Primero",
+        previous: "Anterior",
+        next: "Siguiente",
+        last: "Último",
+      },
+      aria: {
+        sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+        sortDescending: ": Activar para ordenar la tabla en orden descendente",
+      },
+    },
+  };
+  
+  constructor(
+    private router: Router,
+    private modalService: BsModalService,
+    private api: ApiService,
+    private appComponent: AppComponent
+  ) {
+  }
 
   ngOnInit(): void {
+    this.SetMesIniFin();
+    this.usu_id = localStorage.getItem('usuario');
+    this.loadEstado();
+    this.loadPrioridad();
+    this.loadTemadeAyuda();
+    this.loadDataProceso();
     this.getObjetoMenu();
     this.ObtenerObjId();
+  }
+
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+  }
+
+  descargaExcel() {
+    let btnExcel = document.querySelector('#tablaDataProceso .dt-buttons .dt-button.buttons-excel.buttons-html5') as HTMLButtonElement;
+    btnExcel.click();
+  }
+
+  ngAfterViewInit() {
+    this.dtTrigger.next();
+  }
+  
+  CerrarModalProceso() {
+    this.loadDataProceso();
+    if (this.modalRef) {
+      this.modalRef.hide();
+    }
+  }
+
+  loadDataProceso() {
+    this.loading = true;
+
+    const data_post = {
+      p_tkt_id: (this.tkt_id == null || this.tkt_id === '') ? 0 : parseInt(this.tkt_id),
+      p_tkt_numero: (this.tkt_numero == null || this.tkt_numero === '') ? 0 : parseInt(this.tkt_numero),
+      p_est_id: (this.est_id == null || this.est_id === '') ? 0 : parseInt(this.est_id),
+      p_tea_id: (this.tea_id == null || this.tea_id === '') ? 0 : parseInt(this.tea_id),
+      p_pri_id: (this.pri_id == null || this.pri_id === '') ? 0 : parseInt(this.pri_id),
+      p_age_id: (this.age_id == null || this.age_id === '') ? 0 : parseInt(this.age_id),
+      p_usu_id: (this.usu_id == null || this.usu_id === '') ? 0 : parseInt(this.usu_id),
+      p_tkt_fecini: this.tkt_fecini,
+      p_tkt_fecfin: this.tkt_fecfin,
+      p_tkt_activo: 9
+    };
+
+    this.api.getticketlis(data_post).subscribe({
+      next: (data: any[]) => {
+        if (Array.isArray(data) && data.length > 0) {
+          this.dataTicket = data.map(item => ({
+            ...item,
+            bot_botons_parsed: this.safeParse(item.bot_botons)
+          }));
+          this.exportarHabilitado = true;
+          this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            dtInstance.destroy();
+            this.dtTrigger.next();
+          });
+        } else {
+          this.dataTicket = [];
+          this.exportarHabilitado = false;
+          this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            dtInstance.clear().draw();
+          });
+        }
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+        this.exportarHabilitado = false;
+        swal.fire('Error', 'Ocurrió un error al cargar los datos', 'error');
+      }
+    });
   }
 
   ObtenerObjId(){
@@ -35,4 +234,118 @@ export class TicketComponent implements OnInit {
     const ObjetoMenu = localStorage.getItem('objetosMenu');
     this.ObjetoMenu = ObjetoMenu ? JSON.parse(ObjetoMenu) : [];
   }
+
+  //FUNCIONES
+  SetMesIniFin(){
+    const today = new Date();
+
+    const yyyy = today.getFullYear();
+    const mm = (today.getMonth() + 1).toString().padStart(2, '0');
+    const dd = today.getDate().toString().padStart(2, '0');
+
+    this.tkt_fecini = `${yyyy}-${mm}-01`;
+    this.tkt_fecfin = `${yyyy}-${mm}-${dd}`;
+  }
+
+  TicketIns() {
+    this.router.navigate(['/nuevo-ticket']);
+  }
+
+  restrictNumeric(e) {
+    let input;
+    if (e.metaKey || e.ctrlKey) {
+      return true;
+    }
+    if (e.which === 32) {
+     return false;
+    }
+    if (e.which === 0) {
+     return true;
+    }
+    if (e.which < 33) {
+      return true;
+    }
+    input = String.fromCharCode(e.which);
+    return !!/[\d\s]/.test(input);
+  }
+
+  loadEstado() {
+    const data_post = {
+      p_est_id: 0,
+      p_est_activo: 1
+    };
+
+    this.api.getestadossel(data_post).subscribe((data: any) => {
+      this.dataEstado = data;
+    });
+  }
+  
+  loadPrioridad() {
+    const data_post = {
+      p_pri_id: 0,
+      p_pri_activo: 1
+    };
+
+    this.api.getprioridadsel(data_post).subscribe((data: any) => {
+      this.dataPrioridad = data;
+    });
+  }
+  
+  loadTemadeAyuda() {
+    const data_post = {
+      p_tea_id: 0,
+      p_tea_idpadr: 0,
+      p_tea_activo: 1
+    };
+
+    this.api.gettemaayudasel(data_post).subscribe((data: any) => {
+      this.dataTemaAyuda = data;
+    });
+  }
+
+  //PARSE BUTTONS ARRAY 
+  safeParse(jsonStr: string): any[] {
+    try {
+      return JSON.parse(jsonStr || '[]');
+    } catch (e) {
+      console.error('Error al parsear bot_botons:', e);
+      return [];
+    }
+  }
+
+  getIdButton(bot_id: number, item: any) {
+    console.log('Botón presionado:', bot_id, 'para ticket:', item.tkt_numero);
+    this.selectedTicket = item;
+
+    switch (bot_id) {
+      case 2:
+        this.modalRef = this.modalService.show(this.OpenModalEditarTicket);
+        break;
+      case 3:
+        this.modalRef = this.modalService.show(this.OpenModalAnularTicket);
+        break;
+      case 4:
+        this.modalRef = this.modalService.show(this.OpenModalVerTicket,{ class: 'modal-xl modal-dialog-centered' });
+        break;
+      case 6:
+        this.modalRef = this.modalService.show(this.OpenModalAsignarTicket);
+        break;
+      case 7:
+        this.modalRef = this.modalService.show(this.OpenModalAtencionTicket);
+        break;
+      case 8:
+        this.modalRef = this.modalService.show(this.OpenModalResponderTicket);
+        break;
+      case 10:
+        this.modalRef = this.modalService.show(this.OpenModalCerrarTicket);
+        break;
+      case 11:
+        this.modalRef = this.modalService.show(this.OpenModalTrazabilidadTicket);
+        break;
+      default:
+        console.warn('Botón no reconocido:', bot_id);
+        break;
+    }
+  }
+
 }

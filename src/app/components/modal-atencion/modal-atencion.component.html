@@ -1,0 +1,36 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">{{titulopant}} : #{{ ticket?.tkt_numero}}</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="cancelar()"></button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xl-12 col-md-12">
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title bg-danger-subtle rounded fs-3">
+                            <i class="ri-ticket-2-line text-danger"></i>
+                        </span>
+                    </div>
+                    <div class="text-end flex-grow-1">
+                        <p class="text-uppercase fw-medium text-muted text-truncate fs-13 mb-0"><b>TICKET :</b> # {{ ticket?.tkt_numero}}</p>
+                        <p class="text-uppercase fw-medium text-muted text-truncate fs-13 mb-0"><b>FECHA :</b> {{ ticket?.tkt_fectkt}}</p>
+                        <p class="text-uppercase fw-medium text-muted text-truncate fs-13 mb-0"><b>HORA :</b> {{ ticket?.tkt_hortkt}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-12 col-md-12">
+        <div>
+            <label for="tkt_obsanu" class="form-label">OBSERVACIONES</label>
+            <textarea name="tkt_obsanu" id="tkt_obsanu" [(ngModel)]="tkt_obsanu" class="form-control" ng-pattern="/^[a-zA-Z]*$/" oninput="this.value = this.value.toUpperCase()" rows="6"></textarea>
+        </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-success btn-sm" (click)="ProcesarRegistro()"><i class="bx bx-power-off"></i> ATENDER TICKET</button>
+  <button class="btn btn-danger btn-sm" (click)="cancelar()"><i class="bx bx-log-in"></i> CANCELAR</button>
+</div>

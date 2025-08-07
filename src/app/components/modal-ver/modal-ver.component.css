@@ -1,0 +1,15 @@
+.classphrag p{
+    padding: 2.5px;
+}
+.cheadver{
+    padding: 13px 0px;
+}
+.table>:not(caption)>*>* {
+    padding: .10rem .6rem;
+}
+.cardobservaciones{
+    height: 140px;
+}
+.carddownload{
+    height: 200px;
+}

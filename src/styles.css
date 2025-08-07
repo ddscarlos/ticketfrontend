@@ -39,27 +39,27 @@ agm-map {
 
 table.dataTable tbody>tr.selected,
 table.dataTable tbody>tr>.selected {
-    background-color: #2C3180 !important;
+    background-color: #0059edbf !important;
     color: rgb(241, 241, 241) !important;
 }
 
 .dataTables_wrapper .dataTables_paginate a.paginate_button.current,
 .dataTables_wrapper .dataTables_paginate a.paginate_button.current:hover {
     background: unset !important;
-    background-color: #2C3180 !important;
-    border-color: #2C3180 !important;
+    background-color: #0059edbf !important;
+    border-color: #0059edbf !important;
     color: #FFF !important;
 }
 
 .btn-info-mdsb {
     background-color: #FFF !important;
-    border-color: #2C3180 !important;
-    color: #2C3180 !important;
+    border-color: #0059edbf !important;
+    color: #0059edbf !important;
 }
 
 .btn-info-mdsb:not([disabled]):hover {
-    background-color: #2C3180 !important;
-    border-color: #2C3180 !important;
+    background-color: #0059edbf !important;
+    border-color: #0059edbf !important;
     color: #FFF !important;
 }
 
@@ -86,4 +86,16 @@ div#liveScore {
 
 .app-header__content {
     background: linear-gradient(to bottom, #ffb88c, #de6262);
+}
+
+.ng-select .ng-select-container {
+    min-height: 30px;
+    height: 30px;
+}
+.ng-select.ng-select-single .ng-select-container {
+    min-height: 30px;
+    height: 30px;
+}
+.ng-select.ng-select-single .ng-select-container {
+    height: 30px;
 }

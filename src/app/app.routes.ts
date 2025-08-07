@@ -6,6 +6,7 @@ import { NoAuthGuard } from "./guards/no-auth.guard";
 import { ExampleComponent } from "./pages/example/example.component";
 import { TicketComponent } from "./pages/ticket/ticket.component";
 import { ReporteComponent } from "./pages/reporte/reporte.component";
+import { NuevoTicketComponent } from "./pages/nuevo-ticket/nuevo-ticket.component";
 
 export const ROUTES: Routes = [
   { path: "example", component: ExampleComponent},
@@ -13,6 +14,7 @@ export const ROUTES: Routes = [
   { path: "dashboard", component: DashboardComponent , canActivate: [AuthGuard]},
   
   { path: "ticket", component: TicketComponent , canActivate: [AuthGuard]},
+  { path: "nuevo-ticket", component: NuevoTicketComponent , canActivate: [AuthGuard]},
   { path: "reporte", component: ReporteComponent , canActivate: [AuthGuard]},
   
   /* { path: "casos", component: CasosComponent , canActivate: [AuthGuard]}, */

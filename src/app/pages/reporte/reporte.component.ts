@@ -7,6 +7,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./reporte.component.css']
 })
 export class ReporteComponent implements OnInit {
+  titulopant : string = "Reporte";
+  icono : string = "pe-7s-next-2";
+  loading: boolean = false;
+  files: File[] = [];
 
   ObjetoMenu: any[] = [];
   ruta: string = '';

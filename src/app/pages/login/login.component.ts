@@ -51,12 +51,13 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('usuario', res.user.id);
 
         const datausuario = {
-          p_age_id: 0,
           p_usu_id: res.user.id,
           p_usu_apepat: '',
           p_usu_apemat: '',
           p_usu_nombre: '',
-          p_age_activo: 1,
+          p_usu_loging: '',
+          p_usu_chkadm: 9,
+          p_usu_activo: 9
         };
 
         this.api.getDatosUsuario(datausuario).subscribe({
