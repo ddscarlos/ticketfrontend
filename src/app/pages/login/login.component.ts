@@ -94,7 +94,7 @@ export class LoginComponent implements OnInit {
               confirmButtonText: 'Ingresar',
               confirmButtonColor: '#3085d6'
             }).then(() => {
-              this.router.navigate(['/dashboard']);
+              this.router.navigate(['/ticket']);
             });
           },
           error: (err) => {

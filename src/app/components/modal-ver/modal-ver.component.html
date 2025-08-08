@@ -40,7 +40,7 @@
     </div>
     <div class="col-xl-6 col-md-6 col-sm-12">
         <div class="row">
-            <div class="card card-height-100 carddownload">
+            <div class="card carddownload">
                 <div class="card-body">
                     <table class="table table-borderless align-middle mb-0">
                         <thead class="table-active">
@@ -50,10 +50,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>jordan.martino@hybrix.com</td>
-                            <td class="text-center"><button class="btn btn-success btn-sm"><i class="bx bx-download"></i> Descargar</button></td>
-                        </tr>
+                            <tr *ngFor="let datoFile of dataArchivos">
+                                <td>{{datoFile.arc_nombre}}</td>
+                                <td class="text-center">
+                                    <span class="badge badge-pill badge-outline-primary" data-key="t-custom">
+                                        <i class="ri-eye-line"></i>
+                                    </span>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -66,7 +70,7 @@
                         <p class="text-uppercase fw-medium text-muted text-truncate fs-13 mb-0"><b>OBSERVACIONES:</b></p>
                     </div>
                     <div class="text-muted">
-                        <p class="text-muted mb-0 fs-12">{{ ticket?.tkt_observ }}</p>
+                        <p class="text-muted mb-0 fs-12" [innerHTML]="ticket?.tkt_observ"></p>
                     </div>
                 </div>
             </div>

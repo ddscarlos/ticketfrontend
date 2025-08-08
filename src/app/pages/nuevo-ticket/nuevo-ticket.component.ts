@@ -22,7 +22,7 @@ export class NuevoTicketComponent implements OnInit {
   tkt_id : string = '0';
   tea_id : string = '0';
   usu_id : string = '0';
-  ori_id : string = '0';
+  ori_id: number = 1;
   tkp_numero : string = '';
   tkt_asunto : string = '';
   tkt_observ : string = '';
@@ -37,8 +37,8 @@ export class NuevoTicketComponent implements OnInit {
     }
 
   ngOnInit() {
-    this.loadTemadeAyuda();
     this.loadOrigen();
+    this.loadTemadeAyuda();
   }
 
   loadTemadeAyuda() {
@@ -73,66 +73,66 @@ export class NuevoTicketComponent implements OnInit {
   }
 
   procesaRegistro() {
-  const formData = new FormData();
-  formData.append("p_tkt_id", "0"); // Nuevo ticket
-  formData.append("p_tea_id", String(this.tea_id));
-  formData.append("p_usu_id", String(localStorage.getItem("usuario")));
-  formData.append("p_ori_id", String(this.ori_id));
-  formData.append("p_tkp_numero", "");
-  formData.append("p_tkt_asunto", this.tkt_asunto);
-  formData.append("p_tkt_observ", this.tkt_observ.toUpperCase());
-  formData.append("p_tkt_numcel", this.tkt_numcel || "");
+    const formData = new FormData();
+    formData.append("p_tkt_id", "0"); // Nuevo ticket
+    formData.append("p_tea_id", String(this.tea_id));
+    formData.append("p_usu_id", String(localStorage.getItem("usuario")));
+    formData.append("p_ori_id", String(this.ori_id));
+    formData.append("p_tkp_numero", "");
+    formData.append("p_tkt_asunto", this.tkt_asunto);
+    formData.append("p_tkt_observ", this.tkt_observ.toUpperCase());
+    formData.append("p_tkt_numcel", this.tkt_numcel || "");
 
-  // Agregar archivos seleccionados
-  this.files.forEach((file) => {
-    formData.append("files[]", file);
-  });
+    // Agregar archivos seleccionados
+    this.files.forEach((file) => {
+      formData.append("files[]", file);
+    });
 
-  swal
-    .fire({
-      title: "Mensaje",
-      html: "¿Seguro de registrar el ticket?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "ACEPTAR",
-      cancelButtonText: "CANCELAR",
-    })
-    .then((result) => {
-      if (result.isConfirmed) {
-        this.api.getticketsgra(formData).subscribe({
-          next: (data: any) => {
-            if (data[0].error == 0) {
-              swal
-                .fire({
-                  title: "Éxito",
-                  html: data[0].mensa.trim(),
-                  icon: "success",
+    swal
+      .fire({
+        title: "Mensaje",
+        html: "¿Seguro de registrar el ticket?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "ACEPTAR",
+        cancelButtonText: "CANCELAR",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.api.getticketsgra(formData).subscribe({
+            next: (data: any) => {
+              if (data[0].error == 0) {
+                swal
+                  .fire({
+                    title: "Éxito",
+                    html: data[0].mensa.trim(),
+                    icon: "success",
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "Aceptar",
+                  })
+                  .then(() => {
+                    this.router.navigate(["/ticket"]);
+                  });
+              } else {
+                swal.fire({
+                  title: "Error",
+                  text: data[0].mensa.trim(),
+                  icon: "error",
                   confirmButtonColor: "#3085d6",
                   confirmButtonText: "Aceptar",
-                })
-                .then(() => {
-                  this.router.navigate(["/ticket"]);
                 });
-            } else {
-              swal.fire({
-                title: "Error",
-                text: data[0].mensa.trim(),
-                icon: "error",
-                confirmButtonColor: "#3085d6",
-                confirmButtonText: "Aceptar",
-              });
-            }
-          },
-          error: (err) => {
-            swal.fire("Error", "No se pudo registrar el ticket", "error");
-            console.error(err);
-          },
-        });
-      }
-    });
-}
+              }
+            },
+            error: (err) => {
+              swal.fire("Error", "No se pudo registrar el ticket", "error");
+              console.error(err);
+            },
+          });
+        }
+      });
+  }
 
 
 }

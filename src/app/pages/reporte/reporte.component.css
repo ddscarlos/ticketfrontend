@@ -1,0 +1,16 @@
+.five-cols > div {
+    width: 20%;
+    flex: 0 0 auto;
+}
+
+.chart-full-width {
+  width: 100% !important;
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 992px) {
+    .five-cols > div {
+        width: 50%;
+    }
+}

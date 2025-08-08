@@ -30,6 +30,7 @@ table.dataTable a {
 
 #tablaDataProceso {
   overflow: visible !important;
+  padding-top: 12px;
 }
 
 .dropdown {
@@ -39,4 +40,13 @@ table.dataTable a {
 .dropdown-menu {
   z-index: 1050 !important;
   position: absolute !important;
+}
+
+table.dataTable thead th, table.dataTable thead td , table.dataTable td {
+    padding: 10px 18px;
+    border-bottom: 1px solid #11111138;
+}
+
+.card {
+    border: var(--tb-card-border-width) solid #11111138;
 }

@@ -21,20 +21,78 @@
           <div class="row">
             <div class="col-xxl-5 col-md-5">
               <div>
-                <label for="tkt_asunto" class="form-label">FECHA INICIO</label>
-                <input name="cpt_fecapr" id="cpt_fecapr" [(ngModel)]="cpt_fecapr" type="date" class="form-control form-control-sm">
+                <label for="tkt_fecini" class="form-label">FECHA INICIO</label>
+                <input name="tkt_fecini" id="tkt_fecini" [(ngModel)]="tkt_fecini" type="date" class="form-control form-control-sm">
               </div>
             </div>
             <div class="col-xxl-5 col-md-5">
               <div>
-                <label for="tkt_asunto" class="form-label">FECHA FIN</label>
-                <input name="cpt_fecapr" id="cpt_fecapr" [(ngModel)]="cpt_fecapr" type="date" class="form-control form-control-sm">
+                <label for="tkt_fecfin" class="form-label">FECHA FIN</label>
+                <input name="tkt_fecfin" id="tkt_fecfin" [(ngModel)]="tkt_fecfin" type="date" class="form-control form-control-sm">
               </div>
             </div>
             <div class="col-xxl-2 col-md-2" style="padding-top: 22px;">
               <div>
-                <button class="mb-2 mr-2 btn btn-primary btn-md text-white d-flex btn-block align-items-center gap-1 text-center" id="Grabar" (click)="procesaRegistro()" style="place-content: center;"><i class="ri-search-line"></i> CONSULTAR</button>
+                <button class="mb-2 mr-2 btn btn-primary btn-md text-white d-flex btn-block align-items-center gap-1 text-center" id="Grabar" (click)="loadDashboard()" style="place-content: center;"><i class="ri-search-line"></i> CONSULTAR</button>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="row g-0 text-center five-cols d-flex flex-wrap">
+                <div>
+                    <div class="p-3 border border-dashed border-start-0" style="background-color: #00a3bdd1;">
+                        <h5 class="mb-1 text-white"><span class="counter-value" [attr.data-target]="canreg">{{ canreg }}</span></h5>
+                        <p class="text-white mb-0">REGISTRADOS</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="p-3 border border-dashed border-start-0" style="background-color: #fd7e14d1;">
+                        <h5 class="mb-1 text-white"><span class="counter-value" [attr.data-target]="canena">{{ canena }}</span></h5>
+                        <p class="text-white mb-0">EN ATENCIÓN</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="p-3 border border-dashed border-start-0" style="background-color: #004987;">
+                        <h5 class="mb-1 text-white"><span class="counter-value" [attr.data-target]="canres">{{ canres }}</span></h5>
+                        <p class="text-white mb-0">RESUELTOS</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="p-3 border border-dashed border-start-0" style="background-color: #ffc107d1;">
+                        <h5 class="mb-1 text-white"><span class="counter-value" [attr.data-target]="canobs">{{ canobs }}</span></h5>
+                        <p class="text-white mb-0">OBSERVADOS</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="p-3 border border-dashed border-start-0" style="background-color: #218838d1;">
+                        <h5 class="mb-1 text-white"><span class="counter-value" [attr.data-target]="canfin">{{ canfin }}</span></h5>
+                        <p class="text-white mb-0">FINALIZADOS</p>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-xxl-12 col-md-12">
+                <div class="container-fluid mt-4 px-0">
+                    <highcharts-chart
+                        class="chart-full-width"
+                        [Highcharts]="Highcharts"
+                        [options]="chartOptions"
+                        style="width: 100%; height: 400px; display: block;"
+                    ></highcharts-chart>
+                </div>
             </div>
           </div>
         </div>

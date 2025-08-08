@@ -67,6 +67,8 @@ export class TicketComponent implements OnInit {
   
   dtTrigger: Subject<any> = new Subject<any>();
   dtOptions: any = {
+    destroy: false,
+    retrieve: true,
     pagingType: "full_numbers",
     pageLength: 10,
     dom: "Bfrtip",

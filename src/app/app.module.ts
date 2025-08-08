@@ -37,6 +37,8 @@ import { ModalValidarComponent } from './components/modal-validar/modal-validar.
 import { ModalVerComponent } from './components/modal-ver/modal-ver.component';
 import { ModalAtencionComponent } from './components/modal-atencion/modal-atencion.component';
 import { ModalTrazabilidadComponent } from './components/modal-trazabilidad/modal-trazabilidad.component';
+import { HighchartsChartModule } from 'highcharts-angular';
+
 registerLocaleData(localeEs);
 
 @NgModule({
@@ -62,6 +64,7 @@ registerLocaleData(localeEs);
   ],
   imports: [
     BrowserModule,
+    HighchartsChartModule,
     DataTablesModule,
     HttpClientModule,
     ReactiveFormsModule,

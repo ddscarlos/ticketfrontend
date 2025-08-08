@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import * as Highcharts from 'highcharts';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { AppComponent } from 'src/app/app.component';
+import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-reporte',
@@ -15,24 +19,142 @@ export class ReporteComponent implements OnInit {
   ObjetoMenu: any[] = [];
   ruta: string = '';
   objid : number = 0 ;
-  
-  constructor(private router: Router) {}
+  dataDashboard: any;
+
+  tkt_fecini:string='';
+  tkt_fecfin:string='';
+  canreg:number=0;
+  canena:number=0;
+  canres:number=0;
+  canobs:number=0;
+  canfin:number=0;
+
+  // 📊 HIGHCHARTS
+  Highcharts: typeof Highcharts = Highcharts;
+  chartOptions: Highcharts.Options;
+
+  constructor(
+    private router: Router,
+    private modalService: BsModalService,
+    private api: ApiService,
+    private appComponent: AppComponent
+  ) {
+    this.appComponent.login = false;
+  }
 
   ngOnInit(): void {
+    this.SetMesIniFin();
     this.getObjetoMenu();
     this.ObtenerObjId();
+    this.loadDashboard();
+  }
+  
+  SetMesIniFin(){
+    const today = new Date();
+
+    const yyyy = today.getFullYear();
+    const mm = (today.getMonth() + 1).toString().padStart(2, '0');
+    const dd = today.getDate().toString().padStart(2, '0');
+
+    this.tkt_fecini = `${yyyy}-${mm}-01`;
+    this.tkt_fecfin = `${yyyy}-${mm}-${dd}`;
+  }
+
+  loadDashboard() {
+    const data_post = {
+      p_tkt_fecini: this.tkt_fecini,
+      p_tkt_fecfin: this.tkt_fecfin
+    };
+
+    this.api.getticketdsh(data_post).subscribe((data: any) => {
+      this.dataDashboard = data[0];
+      this.canreg = parseInt(this.dataDashboard.canreg);
+      this.canena = parseInt(this.dataDashboard.canena);
+      this.canres = parseInt(this.dataDashboard.canres);
+      this.canobs = parseInt(this.dataDashboard.canobs);
+      this.canfin = parseInt(this.dataDashboard.canfin);
+
+      if (this.dataDashboard && this.dataDashboard.jsnfec) {
+        const parsedData = JSON.parse(this.dataDashboard.jsnfec);
+
+        const categories = parsedData.map((item: any) => item.tkt_fectkt);
+        const dataSeries = parsedData.map((item: any) => item.tkt_canreg);
+
+        this.chartOptions = {
+          chart: {
+            type: 'column',
+            options3d: {
+              enabled: true,
+              alpha: 15,
+              beta: 15,
+              depth: 50,
+              viewDistance: 25
+            }
+          },
+          title: {
+            text: 'Tickets por Fecha'
+          },
+          xAxis: {
+            categories: categories
+          },
+          yAxis: {
+            title: {
+              text: 'Cantidad de Tickets'
+            },
+            allowDecimals: false
+          },
+          plotOptions: {
+            column: {
+              depth: 25,
+              dataLabels: {
+                enabled: true,
+                inside: false,
+                format: '{point.y} tickets',
+                style: {
+                  fontSize: '12px',
+                  fontWeight: 'bold'
+                }
+              }
+            }
+          },
+          series: [{
+            name: 'Tickets',
+            type: 'column',
+            data: dataSeries
+          }]
+        };
+      }
+      
+      setTimeout(() => {
+        const counters = document.querySelectorAll('.counter-value');
+
+        counters.forEach(counter => {
+          const el = counter as HTMLElement;
+          const target = parseInt(el.getAttribute('data-target') || '0');
+          let count = 0;
+
+          const step = Math.ceil(target / 20); // ajuste la velocidad
+
+          const interval = setInterval(() => {
+            count += step;
+            if (count >= target) {
+              el.innerText = target.toString();
+              clearInterval(interval);
+            } else {
+              el.innerText = count.toString();
+            }
+          }, 30);
+        });
+      }, 100);
+      
+    });
   }
 
   ObtenerObjId(){
     this.ruta = this.router.url.replace(/^\/+/, '');
-    console.log('Ruta actual:', this.ruta);
-
     const match = this.ObjetoMenu.find(item => item.obj_enlace === this.ruta);
     if (match) {
       this.objid = match.obj_id;
-      console.log('obj_id encontrado:', this.objid);
-    } else {
-      console.log('Ruta no encontrada en objetosMenu');
     }
   }
 
@@ -40,5 +162,4 @@ export class ReporteComponent implements OnInit {
     const ObjetoMenu = localStorage.getItem('objetosMenu');
     this.ObjetoMenu = ObjetoMenu ? JSON.parse(ObjetoMenu) : [];
   }
-
 }

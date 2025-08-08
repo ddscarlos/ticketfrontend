@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 export class ModalVerComponent implements OnInit {
   titulopant : string = "VISUALIZAR TICKET";
   tkt_id : string = '0';
+  dataArchivos:any;
 
   @Input() ticket: any;
   
@@ -28,7 +29,22 @@ export class ModalVerComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.ticket);
+    console.log(this.ticket.tkt_id);
+    this.tkt_id = this.ticket.tkt_id;
+    this.loadArchivos();
+  }
+  
+  loadArchivos() {
+    const data_post = {
+      p_arc_id: 0,
+      p_tkt_id: (this.tkt_id == null || this.tkt_id === '') ? 0 : parseInt(this.tkt_id),
+      p_rut_id: 0,
+      p_arc_activo: 1
+    };
+
+    this.api.getarchivossel(data_post).subscribe((data: any) => {
+      this.dataArchivos = data;
+    });
   }
 
   cancelar() {

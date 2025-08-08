@@ -442,4 +442,11 @@ export class ApiService {
       })
     );
   }
+  getticketdsh(data: object) {
+    return this.postQuery("ticket/ticketsdsh", data).pipe(
+      map((data) => {
+        return data;
+      })
+    );
+  }
 }

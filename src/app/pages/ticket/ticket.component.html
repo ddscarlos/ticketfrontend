@@ -1,3 +1,8 @@
+<div *ngIf="loading" class="loading-overlay">
+  <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+    <span class="sr-only">Cargando...</span>
+  </div>
+</div>
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
@@ -28,7 +33,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-xxl-3 col-md-6">
+            <div class="col-xxl-2 col-md-6">
               <div>
                 <label for="est_id" class="form-label">ESTADO</label>
                 <ng-select class="mayus" [(ngModel)]="est_id">
@@ -37,7 +42,7 @@
                 </ng-select>
               </div>
             </div>
-            <div class="col-xxl-3 col-md-6">
+            <div class="col-xxl-2 col-md-6">
               <div>
                 <label for="pri_id" class="form-label">PRIORIDAD</label>
                 <ng-select class="mayus" [(ngModel)]="pri_id">
@@ -46,7 +51,7 @@
                 </ng-select>
               </div>
             </div>
-            <div class="col-xxl-4 col-md-6">
+            <div class="col-xxl-6 col-md-6">
               <div>
                 <label for="tea_id" class="form-label">TEMA DE AYUDA</label>
                 <ng-select class="mayus" [(ngModel)]="tea_id">
@@ -70,7 +75,7 @@
               </div>
             </div>
             <div class="col-xxl-4 col-md-6">
-              <div class="card-header align-items-center d-flex" style="justify-content: center;">
+              <div class="card-header align-items-center d-flex" style="justify-content: end; padding-right: 0px;">
                 <div class="d-flex gap-2">
                   <button type="button" class="btn btn-primary btn-outline-primary btn-sm text-white d-flex justify-content-center align-items-center gap-1" id="buscar" (click)="loadDataProceso()">
                     <i class="ri-search-line"></i> BUSCAR </button>

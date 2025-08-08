@@ -99,3 +99,7 @@ div#liveScore {
 .ng-select.ng-select-single .ng-select-container {
     height: 30px;
 }
+
+.dataTables_wrapper .dataTables_filter input {
+    margin-right: 12px !important;
+}
