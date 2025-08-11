@@ -104,29 +104,6 @@ export class ApiService {
     );
   }
 
-  getcolaboradorsel(data: object) {
-    return this.postQuery("colaborador/colaboradorsel", data).pipe(
-      map((data) => {
-        return data;
-      })
-    );
-  }
-
-  getequipotestersel(data: object) {
-    return this.postQuery("colaborador/equipotestersel", data).pipe(
-      map((data) => {
-        return data;
-      })
-    );
-  }
-
-  getequipocalidadsel(data: object) {
-    return this.postQuery("colaborador/equipocalidadsel", data).pipe(
-      map((data) => {
-        return data;
-      })
-    );
-  }
   getagentegra(data: object) {
     return this.postQuery("ticket/agentegra", data).pipe(
       map((data) => {
@@ -444,6 +421,22 @@ export class ApiService {
   }
   getticketdsh(data: object) {
     return this.postQuery("ticket/ticketsdsh", data).pipe(
+      map((data) => {
+        return data;
+      })
+    );
+  }
+  
+  getarchivosanu(data: object) {
+    return this.postQuery("ticket/archivosanu", data).pipe(
+      map((data) => {
+        return data;
+      })
+    );
+  }
+  
+  getFileBase64ByPath(data: object) {
+    return this.postQuery('files/base64-from-path', data).pipe(
       map((data) => {
         return data;
       })

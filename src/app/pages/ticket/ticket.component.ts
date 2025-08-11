@@ -252,6 +252,10 @@ export class TicketComponent implements OnInit {
   TicketIns() {
     this.router.navigate(['/nuevo-ticket']);
   }
+  
+  TicketEdit(tkt_id: string) {
+    this.router.navigate(['/editar-ticket',tkt_id]); 
+  }
 
   restrictNumeric(e) {
     let input;

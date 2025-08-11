@@ -19,6 +19,8 @@ export class ModalAsignarComponent implements OnInit {
   tkt_obsasg : string = '';
   age_id : string = '0';
 
+  age_idtick : string = '0';
+
   dataAgente:any;
   
   @Input() ticket: any;
@@ -36,10 +38,14 @@ export class ModalAsignarComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.ticket);
+    
     this.tkt_id=this.ticket.tkt_id;
     this.tkt_numero=this.ticket.tkt_numero;
     this.tkt_fectkt=this.ticket.tkt_fectkt;
     this.tkt_hortkt=this.ticket.tkt_hortkt;
+    this.age_idtick=this.ticket.age_id;
+
+    //console.log(this.age_idtick);
     this.loadAgente();
   }
 
@@ -55,8 +61,8 @@ export class ModalAsignarComponent implements OnInit {
     };
 
     this.api.getagentesel(data_post).subscribe((data: any) => {
-      const currentAgeId = Number(localStorage.getItem("age_id"));
-      this.dataAgente = data.filter((agente: any) => agente.age_id !== currentAgeId);
+      //const currentAgeId = Number(localStorage.getItem("age_id"));
+      this.dataAgente = data.filter((agente: any) => agente.age_id !== parseInt(this.age_idtick) && (parseInt(this.age_idtick) > 0 || this.age_idtick !== ''));
     });
   }
 

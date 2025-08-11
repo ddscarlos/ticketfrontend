@@ -1,3 +1,9 @@
+<div *ngIf="loading" class="loading-overlay">
+  <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+    <span class="sr-only">Cargando...</span>
+  </div>
+</div>
+
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
@@ -40,7 +46,6 @@
               <div>
                 <label for="ori_id" class="form-label">ORIGEN</label>
                 <ng-select class="mayus" [(ngModel)]="ori_id">
-                    <ng-option value="0">Seleccionar Origen</ng-option>
                     <ng-option *ngFor="let item of dataOrigen" [value]="item.ori_id">{{item.ori_descri}}</ng-option>
                 </ng-select>
               </div>
@@ -67,17 +72,82 @@
             <div class="col-xxl-12 col-md-6">
               <div>
                 <label class="form-label"><strong>Adjuntar Archivos</strong></label>
-                <ngx-dropzone (change)="onSelect($event)" accept="image/jpeg,image/jpg,image/png,image/gif">
-                <ngx-dropzone-label>Arrastra tus archivos o haz clic para seleccionar</ngx-dropzone-label>
+                <ngx-dropzone
+                  [disableClick]="true"
+                  (change)="onSelect($event)"
+                  accept="image/jpeg,image/jpg,image/png,application/pdf">
 
-                <ngx-dropzone-image-preview
-                    ngProjectAs="ngx-dropzone-preview"
-                    *ngFor="let f of files"
-                    [file]="f"
-                    [removable]="true"
-                    (removed)="onRemove(f)">
-                    <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
-                </ngx-dropzone-image-preview>
+                  <ngx-dropzone-label>
+                    Arrastra tus archivos o haz clic para seleccionar
+                  </ngx-dropzone-label>
+
+                  <!-- 1) EXISTENTES DEL SERVIDOR -->
+                  <ng-container *ngFor="let f of existingFiles">
+                    <ngx-dropzone-preview
+                      [file]="{ name: f.name, type: f.type, size: 0 }"
+                      [removable]="true"
+                      (removed)="onRemoveExisting(f)"
+                      (click)="verArchivoExisting(f)"
+                      style="cursor: pointer;"
+                    >
+                      <ngx-dropzone-label>
+                        <div class="dz-file">
+                          <ng-template [ngIf]="f.type.startsWith('image/')">
+                            <i class="ri-image-2-line dz-icon"></i>
+                          </ng-template>
+                          <ng-template [ngIf]="!f.type.startsWith('image/')">
+                            <i class="ri-file-pdf-line dz-icon" *ngIf="f.type==='application/pdf'"></i>
+                            <i class="ri-file-2-line dz-icon" *ngIf="f.type!=='application/pdf'"></i>
+                          </ng-template>
+                          <div class="dz-text">
+                            <div class="dz-name">{{ f.name }}</div>
+                            <div class="dz-meta">Existente</div>
+                          </div>
+                        </div>
+                      </ngx-dropzone-label>
+                    </ngx-dropzone-preview>
+                  </ng-container>
+
+                  <!-- 2) NUEVOS (File[]) -->
+                  <!-- NUEVOS (File[]) -->
+                  <ng-container *ngFor="let f of files">
+                    <ngx-dropzone-image-preview
+                      *ngIf="f.type && f.type.startsWith('image/')"
+                      [file]="f"
+                      [removable]="true"
+                      (removed)="onRemove(f)"
+                      (click)="verArchivoNew(f)"
+                      style="cursor: pointer;"
+                    >
+                      <ngx-dropzone-label>{{ f.name }} ({{ f.type || 'imagen' }})</ngx-dropzone-label>
+                    </ngx-dropzone-image-preview>
+
+                    <ngx-dropzone-preview
+                      *ngIf="!f.type || !f.type.startsWith('image/')"
+                      [file]="f"
+                      [removable]="true"
+                      (removed)="onRemove(f)"
+                      (click)="verArchivoNew(f)"
+                      style="cursor: pointer;"
+                    >
+                      <ngx-dropzone-label>
+                        <div class="dz-file">
+                          <ng-container *ngIf="f.type && f.type.startsWith('image/'); else fileIcon">
+                            <img [src]="f.objectURL" style="max-height:80px;max-width:100px;object-fit:contain" />
+                          </ng-container>
+                          <ng-template #fileIcon>
+                            <i class="ri-file-pdf-line dz-icon" *ngIf="f.type==='application/pdf'"></i>
+                            <i class="ri-file-2-line dz-icon" *ngIf="f.type!=='application/pdf'"></i>
+                          </ng-template>
+                          <div class="dz-text">
+                            <div class="dz-name">{{ f.name }}</div>
+                            <div class="dz-meta">{{ f.type || 'archivo' }}</div>
+                            <div class="dz-meta">Añadido</div>
+                          </div>
+                        </div>
+                      </ngx-dropzone-label>
+                    </ngx-dropzone-preview>
+                  </ng-container>
                 </ngx-dropzone>
               </div>
             </div>
@@ -85,8 +155,8 @@
           <div class="row">
             <div class="col-xxl-12 col-md-6">
                 <p class="text-right d-flex" style="justify-content: end;">
-                    <button class="mb-2 mr-2 btn btn-success btn-sm text-white d-flex justify-content-center align-items-center gap-1" id="Grabar" (click)="procesaRegistro()"><i class="ri-save-3-line"></i> Generar Ticket</button>
-                    <button class="mb-2 mr-2 btn btn-danger btn-sm text-white d-flex justify-content-center align-items-center gap-1" id="Cancelar" [routerLink]="['/incidencia']"><i class="ri-logout-box-line"></i> Cancelar</button>
+                    <button class="mb-2 mr-2 btn btn-success btn-sm text-white d-flex justify-content-center align-items-center gap-1" id="Grabar" (click)="procesaRegistro()"><i class="ri-save-3-line"></i> {{txtbtn}}</button>
+                    <button class="mb-2 mr-2 btn btn-danger btn-sm text-white d-flex justify-content-center align-items-center gap-1" id="Cancelar" [routerLink]="['/ticket']"><i class="ri-logout-box-line"></i> Cancelar</button>
                 </p>
             </div>
           </div>
@@ -95,3 +165,23 @@
     </div>
   </div>
 </div>
+
+<ng-template #previewTpl>
+  <div class="modal-header">
+    <h5 class="modal-title">{{ previewName }}</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="cerrarPreview()"></button>
+  </div>
+  <div class="modal-body">
+    <ng-container *ngIf="isPdf; else imgTpl">
+      <iframe [src]="previewSrc" style="width:100%;min-height:50vh;height:80vh;border:0;"></iframe>
+    </ng-container>
+    <ng-template #imgTpl>
+      <img [src]="previewSrc" style="max-width:100%;height:auto;display:block;margin:0 auto;" />
+    </ng-template>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger btn-sm" (click)="cerrarPreview()">
+      <i class="bx bx-log-in"></i> Cerrar
+    </button>
+  </div>
+</ng-template>

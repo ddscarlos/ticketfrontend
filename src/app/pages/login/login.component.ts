@@ -15,6 +15,7 @@ import swal from "sweetalert2";
 })
 
 export class LoginComponent implements OnInit {
+  txtlogspinner : string = "";
   inputUsuario: string = "";
   inputPassword: string = "";
   sessionMsg: string = "";
@@ -62,6 +63,7 @@ export class LoginComponent implements OnInit {
 
         this.api.getDatosUsuario(datausuario).subscribe({
           next: (datos: any) => {
+            this.txtlogspinner = "Cargando datos del usuario...";
             if (!datos || !datos.length) {
               this.loading = false;
               swal.fire('Error', 'No se encontraron datos del usuario', 'error');
@@ -87,7 +89,9 @@ export class LoginComponent implements OnInit {
 
             this.loading = false;
 
-            swal.fire({
+            this.router.navigate(['/ticket']);
+            
+            /* swal.fire({
               title: 'Bienvenido',
               text: `Hola ${datos[0].usu_nombre}!`,
               icon: 'success',
@@ -95,7 +99,7 @@ export class LoginComponent implements OnInit {
               confirmButtonColor: '#3085d6'
             }).then(() => {
               this.router.navigate(['/ticket']);
-            });
+            }); */
           },
           error: (err) => {
             this.loading = false;

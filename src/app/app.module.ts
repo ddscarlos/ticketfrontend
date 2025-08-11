@@ -21,7 +21,6 @@ import { DashboardComponent } from "./pages/dashboard/dashboard.component";
 import { NgxPrintModule } from "ngx-print";
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { DatePipe } from '@angular/common';
-import { ModalColaboradorComponent } from './components/modal-colaborador/modal-colaborador.component';
 import { QuillModule } from 'ngx-quill';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from "./guards/auth";
@@ -38,6 +37,7 @@ import { ModalVerComponent } from './components/modal-ver/modal-ver.component';
 import { ModalAtencionComponent } from './components/modal-atencion/modal-atencion.component';
 import { ModalTrazabilidadComponent } from './components/modal-trazabilidad/modal-trazabilidad.component';
 import { HighchartsChartModule } from 'highcharts-angular';
+import { ModalPreviewComponent } from './components/modal-preview/modal-preview.component';
 
 registerLocaleData(localeEs);
 
@@ -48,7 +48,6 @@ registerLocaleData(localeEs);
     MenuComponent,
     LoginComponent,
     DashboardComponent,
-    ModalColaboradorComponent,
     ExampleComponent,
     TicketComponent,
     ReporteComponent,
@@ -60,7 +59,8 @@ registerLocaleData(localeEs);
     ModalValidarComponent,
     ModalVerComponent,
     ModalAtencionComponent,
-    ModalTrazabilidadComponent
+    ModalTrazabilidadComponent,
+    ModalPreviewComponent
   ],
   imports: [
     BrowserModule,

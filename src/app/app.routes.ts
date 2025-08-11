@@ -15,6 +15,7 @@ export const ROUTES: Routes = [
   
   { path: "ticket", component: TicketComponent , canActivate: [AuthGuard]},
   { path: "nuevo-ticket", component: NuevoTicketComponent , canActivate: [AuthGuard]},
+  { path: "editar-ticket/:id", component: NuevoTicketComponent , canActivate: [AuthGuard]},
   { path: "reporte", component: ReporteComponent , canActivate: [AuthGuard]},
   
   /* { path: "casos", component: CasosComponent , canActivate: [AuthGuard]}, */

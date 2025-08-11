@@ -26,3 +26,53 @@ tr {
 ::ng-deep .mayus-editor .ql-editor {
   text-transform: uppercase;
 }
+
+.dz-file {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.dz-icon {
+  font-size: 24px;
+}
+.dz-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+.dz-name {
+  font-weight: 600;
+  word-break: break-all;
+}
+.dz-meta {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+::ng-deep ngx-dropzone-preview,
+::ng-deep ngx-dropzone-image-preview {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  width: 180px !important;   /* ancho fijo */
+  height: 140px !important;  /* alto fijo */
+  min-width: 180px !important;
+  min-height: 140px !important;
+  max-width: 180px !important;
+  max-height: 140px !important;
+  padding: 0 20px !important;
+  margin: 10px !important;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+::ng-deep ngx-dropzone-preview img,
+::ng-deep ngx-dropzone-image-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+ngx-dropzone-preview {
+    cursor: pointer;
+}

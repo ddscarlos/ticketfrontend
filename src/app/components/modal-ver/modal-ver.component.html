@@ -53,7 +53,7 @@
                             <tr *ngFor="let datoFile of dataArchivos">
                                 <td>{{datoFile.arc_nombre}}</td>
                                 <td class="text-center">
-                                    <span class="badge badge-pill badge-outline-primary" data-key="t-custom">
+                                    <span class="badge badge-pill badge-outline-primary"  data-key="t-custom" (click)="verArchivo(datoFile)" style="cursor: pointer;">
                                         <i class="ri-eye-line"></i>
                                     </span>
                                 </td>
@@ -81,3 +81,21 @@
 <div class="modal-footer">
   <button class="btn btn-danger btn-sm" (click)="cancelar()"><i class="bx bx-log-in"></i> Cancelar</button>
 </div>
+
+<ng-template #previewTpl>
+  <div class="modal-header">
+    <h5 class="modal-title">{{ previewName }}</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="cerrarPreview()"></button>
+  </div>
+  <div class="modal-body">
+    <ng-container *ngIf="isPdf; else imgTpl">
+      <iframe [src]="previewSrc" style="width:100%;min-height: 50vh;height:80vh;border:0;"></iframe>
+    </ng-container>
+    <ng-template #imgTpl>
+      <img [src]="previewSrc" style="max-width:100%;height:auto;display:block;margin:0 auto;" />
+    </ng-template>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger btn-sm" (click)="cerrarPreview()"><i class="bx bx-log-in"></i> Cerrar</button>
+  </div>
+</ng-template>

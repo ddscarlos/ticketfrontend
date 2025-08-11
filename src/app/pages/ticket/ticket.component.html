@@ -128,7 +128,7 @@
                             <i class="ri-more-fill align-middle"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" [attr.data-bs-container]="'body'">
-                          <li *ngIf="item.chk_botedt"><a class="dropdown-item edit-item-btn" (click)="getIdButton(2, item)">EDITAR</a></li>
+                          <li *ngIf="item.chk_botedt"><a class="dropdown-item edit-item-btn" (click)="TicketEdit(item.tkt_id)">EDITAR</a></li>
                           <li *ngIf="item.chk_botanu"><a class="dropdown-item edit-item-btn" (click)="getIdButton(3, item)">ANULAR</a></li>
                           <li *ngIf="item.chk_botver"><a class="dropdown-item edit-item-btn" (click)="getIdButton(4, item)">VER</a></li>
                           <li *ngIf="item.chk_botasg"><a class="dropdown-item edit-item-btn" (click)="getIdButton(6, item)">ASIGNAR</a></li>
