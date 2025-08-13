@@ -79,9 +79,9 @@
                 <div class="d-flex gap-2">
                   <button type="button" class="btn btn-primary btn-outline-primary btn-sm text-white d-flex justify-content-center align-items-center gap-1" id="buscar" (click)="loadDataProceso()">
                     <i class="ri-search-line"></i> BUSCAR </button>
-                  <button type="button" class="btn btn-warning btn-outline-warning btn-sm text-white d-flex justify-content-center align-items-center gap-1" (click)="TicketIns()">
+                  <button *ngIf="btnPerm.nuevo" type="button" class="btn btn-warning btn-outline-warning btn-sm text-white d-flex justify-content-center align-items-center gap-1" (click)="TicketIns()">
                     <i class="ri-add-circle-line"></i> NUEVO </button>
-                  <button type="button" class="btn btn-success btn-sm text-white d-flex justify-content-center align-items-center gap-1" id="descargaExcel" (click)="descargaExcel()" [disabled]="!exportarHabilitado">
+                  <button *ngIf="btnPerm.excel" type="button" class="btn btn-success btn-sm text-white d-flex justify-content-center align-items-center gap-1" id="descargaExcel" (click)="descargaExcel()" [disabled]="!exportarHabilitado">
                     <i class="ri-file-excel-2-line"></i> EXPORTAR </button>
                 </div>
               </div>

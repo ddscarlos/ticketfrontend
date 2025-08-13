@@ -32,6 +32,8 @@ export class ReporteComponent implements OnInit {
   // 📊 HIGHCHARTS
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options;
+  Highcharts2: typeof Highcharts = Highcharts;
+  chartOptions2: Highcharts.Options;
 
   constructor(
     private router: Router,
@@ -122,6 +124,67 @@ export class ReporteComponent implements OnInit {
             type: 'column',
             data: dataSeries
           }]
+        };
+      }
+
+      if (this.dataDashboard.jsnges) {
+        const gesData = JSON.parse(this.dataDashboard.jsnges);
+
+        const categoriesGes = gesData.map((i: any) => i.tkt_fectkt);
+        const pendientes    = gesData.map((i: any) => Number(i.tkt_canpen) || 0);
+        const resueltos     = gesData.map((i: any) => Number(i.tkt_canres) || 0);
+        const observados    = gesData.map((i: any) => Number(i.tkt_canobs) || 0);
+        const finalizados   = gesData.map((i: any) => Number(i.tkt_canfin) || 0);
+
+        const COLOR_AZUL    = '#438eff'; // RESUELTOS
+        const COLOR_VERDE   = '#2dcb73'; // FINALIZADOS
+        const COLOR_NARANJA = '#f6b749'; // OBSERVADOS
+        const COLOR_ROJO    = '#F54927'; // PENDIENTES
+
+        this.chartOptions2 = {
+          chart: { type: 'column' },
+          title: { text: 'Distribución de estados por día' },
+          xAxis: { categories: categoriesGes, crosshair: true },
+          yAxis: { min: 0, title: { text: 'Cantidad' }, allowDecimals: false },
+          tooltip: {
+            shared: true,
+            headerFormat: '<b>{point.key}</b><br/>',
+            pointFormat: '<span style="color:{series.color}">● {series.name}</span>: <b>{point.y}</b><br/>'
+          },
+          plotOptions: {
+            column: {
+              stacking: 'normal',
+              dataLabels: {
+                enabled: true,
+                inside: true,
+                formatter: function () { return (this.y && this.y > 0) ? String(this.y) : ''; },
+                allowOverlap: true,
+                crop: false,
+                style: {
+                  color: '#FFFFFF',
+                  textOutline: 'none',
+                  fontWeight: 'bold'
+                }
+              },
+              borderWidth: 0,
+              pointPadding: 0.05,
+              groupPadding: 0.08
+            }
+          },
+          legend: {
+            enabled: true,
+            layout: 'horizontal',
+            align: 'center',
+            verticalAlign: 'bottom',
+            symbolRadius: 6,
+            itemStyle: { fontWeight: 'bold' }
+          },
+          series: [
+            { name: 'Pendientes',  type: 'column', data: pendientes,  color: COLOR_ROJO },
+            { name: 'Resueltos',   type: 'column', data: resueltos,   color: COLOR_AZUL },
+            { name: 'Observados',  type: 'column', data: observados,  color: COLOR_NARANJA },
+            { name: 'Finalizados', type: 'column', data: finalizados, color: COLOR_VERDE }
+          ]
         };
       }
       

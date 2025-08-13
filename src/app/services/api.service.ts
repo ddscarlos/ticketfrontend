@@ -167,6 +167,13 @@ export class ApiService {
       })
     );
   }
+  getestadosrespuestasel(data: object) {
+    return this.postQuery("ticket/estadosrespuestasel", data).pipe(
+      map((data) => {
+        return data;
+      })
+    );
+  }
   getprioridadsel(data: object) {
     return this.postQuery("ticket/prioridadsel", data).pipe(
       map((data) => {

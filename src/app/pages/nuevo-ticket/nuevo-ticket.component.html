@@ -77,7 +77,9 @@
                   (change)="onSelect($event)"
                   accept="image/jpeg,image/jpg,image/png,application/pdf">
 
-                  <ngx-dropzone-label>
+                  <ngx-dropzone-label
+                    (click)="onLabelClick($event)"
+                    style="cursor:pointer">
                     Arrastra tus archivos o haz clic para seleccionar
                   </ngx-dropzone-label>
 
@@ -107,6 +109,17 @@
                       </ngx-dropzone-label>
                     </ngx-dropzone-preview>
                   </ng-container>
+                  <ngx-dropzone-preview style="cursor: pointer;" *ngIf="existingFiles?.length > 0 && (existingFiles.length + files.length) < MAX_FILES" (click)="onAddClick($event, dz)" style="cursor: pointer;">
+                    <ngx-dropzone-label>
+                      <div class="dz-file">
+                        <i class="ri-add-box-fill"></i>
+                        <div class="dz-text">
+                          <div class="dz-name">AGREGAR</div>
+                          <div class="dz-meta">ARCHIVOS</div>
+                        </div>
+                      </div>
+                    </ngx-dropzone-label>
+                  </ngx-dropzone-preview>
 
                   <!-- 2) NUEVOS (File[]) -->
                   <!-- NUEVOS (File[]) -->

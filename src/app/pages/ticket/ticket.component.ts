@@ -8,13 +8,26 @@ import { Subject } from "rxjs";
 import { analyzeAndValidateNgModules } from "@angular/compiler";
 import swal from "sweetalert2";
 
+interface PermisoBtn {
+  bot_id: number;
+  bot_descri: string;
+  pus_activo: number | string;
+}
 
 @Component({
   selector: 'app-ticket',
   templateUrl: './ticket.component.html',
   styleUrls: ['./ticket.component.css']
 })
+
 export class TicketComponent implements OnInit {
+  private permSet = new Set<number>();
+
+  btnPerm = {
+    nuevo: false,
+    excel: false,
+  };
+
   titulopant : string = "Tickets";
   icono : string = "pe-7s-next-2";
   loading: boolean = false;
@@ -22,7 +35,11 @@ export class TicketComponent implements OnInit {
   modalRef?: BsModalRef;
   selectedTicket: any;
 
+  btnnuevo:boolean=false;
+  btnexcel:boolean=false;
+
   ObjetoMenu: any[] = [];
+  jsn_permis: any[] = [];
   ruta: string = '';
   objid : number = 0 ;
 
@@ -152,6 +169,7 @@ export class TicketComponent implements OnInit {
     this.loadDataProceso();
     this.getObjetoMenu();
     this.ObtenerObjId();
+    console.log(this.ObjetoMenu[0]);
   }
 
   ngOnDestroy(): void {
@@ -187,6 +205,7 @@ export class TicketComponent implements OnInit {
       p_usu_id: (this.usu_id == null || this.usu_id === '') ? 0 : parseInt(this.usu_id),
       p_tkt_fecini: this.tkt_fecini,
       p_tkt_fecfin: this.tkt_fecfin,
+      p_jsn_permis: this.jsn_permis,
       p_tkt_activo: 9
     };
 
@@ -226,10 +245,38 @@ export class TicketComponent implements OnInit {
     const match = this.ObjetoMenu.find(item => item.obj_enlace === this.ruta);
     if (match) {
       this.objid = match.obj_id;
-      console.log('obj_id encontrado:', this.objid);
+      this.jsn_permis = match.jsn_permis;
+
+      let permisos: PermisoBtn[] = [];
+      const raw = match.jsn_permis;
+  
+      try {
+        const parsed = (typeof raw === 'string') ? JSON.parse(raw) : raw;
+        permisos = Array.isArray(parsed) ? parsed : [];
+      } catch {
+        permisos = [];
+      }
+
+      const ids = permisos.filter(p => Number(p.pus_activo) === 1).map(p => Number(p.bot_id));
+      
+      this.permSet = new Set<number>(ids);
+
+      this.btnPerm.nuevo = this.permSet.has(1);
+      this.btnPerm.excel = this.permSet.has(5);
+      
+      console.log('Permisos activos:', [...this.permSet]);
     } else {
       console.log('Ruta no encontrada en objetosMenu');
     }
+  }
+
+  private resetPermFlags() {
+    Object.keys(this.btnPerm).forEach(k => (this.btnPerm as any)[k] = false);
+  }
+
+  // Helper opcional (por si quieres consultar en línea)
+  hasPerm(botId: number): boolean {
+    return this.permSet.has(botId);
   }
 
   getObjetoMenu() {
@@ -341,6 +388,9 @@ export class TicketComponent implements OnInit {
         break;
       case 8:
         this.modalRef = this.modalService.show(this.OpenModalResponderTicket);
+        break;
+      case 9:
+        this.modalRef = this.modalService.show(this.OpenModalValidarTicket);
         break;
       case 10:
         this.modalRef = this.modalService.show(this.OpenModalCerrarTicket);

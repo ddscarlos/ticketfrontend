@@ -83,23 +83,17 @@ export class LoginComponent implements OnInit {
               p_usu_id: res.user.id,
             };
 
-            this.api.getSeguridadpermisoobjetosel(dataMenu).subscribe((datosMenu: any) => {
-              localStorage.setItem('objetosMenu', JSON.stringify(datosMenu));
+            this.api.getSeguridadpermisoobjetosel(dataMenu).subscribe({
+              next: (datosMenu: any) => {
+                localStorage.setItem('objetosMenu', JSON.stringify(datosMenu));
+                this.loading = false;
+                this.router.navigate(['/ticket']);
+              },
+              error: (err) => {
+                this.loading = false;
+                swal.fire('Error', 'No se pudo cargar el menú', 'error');
+              }
             });
-
-            this.loading = false;
-
-            this.router.navigate(['/ticket']);
-            
-            /* swal.fire({
-              title: 'Bienvenido',
-              text: `Hola ${datos[0].usu_nombre}!`,
-              icon: 'success',
-              confirmButtonText: 'Ingresar',
-              confirmButtonColor: '#3085d6'
-            }).then(() => {
-              this.router.navigate(['/ticket']);
-            }); */
           },
           error: (err) => {
             this.loading = false;

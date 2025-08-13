@@ -7,6 +7,7 @@ import { finalize } from 'rxjs/operators';
 import { TemplateRef, ViewChild } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { NgxDropzoneComponent } from 'ngx-dropzone';
 
 type ExistingFile = {
   arc_id: number;
@@ -30,6 +31,10 @@ export class NuevoTicketComponent implements OnInit {
   existingFiles: ExistingFile[] = [];
   demoMode = true;
 
+  readonly MAX_FILES = 5;
+
+  @ViewChild(NgxDropzoneComponent, { static: false }) dz!: NgxDropzoneComponent;
+  
   @ViewChild('previewTpl', { static: false }) previewTpl: TemplateRef<any>;
   modalRefPreview: BsModalRef = null;
   previewSrc: SafeResourceUrl = null;
@@ -133,15 +138,25 @@ export class NuevoTicketComponent implements OnInit {
     }
   }
 
+  onLabelClick(e: MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.dz.showFileSelector();
+  }
+
+  onAddClick(e: MouseEvent, dz: NgxDropzoneComponent) {
+    e.preventDefault();
+    e.stopPropagation();
+    dz.showFileSelector();
+  }
+
   verArchivoExisting(f: ExistingFile) {
     var ruta = (f.path || '').replace(/\\\\/g, '\\').replace(/\\/g, '/');
 
     this.api.getFileBase64ByPath({ ruta }).subscribe({
       next: (res: any) => {
         if (!res || !res.dataUri) { console.error('Respuesta inesperada', res); return; }
-
         var name = res.name || f.name || 'archivo';
-        // 1) Deducir MIME a partir de back o extensión
         var mime = res.mime || '';
         if (!mime) {
           var byName = name.toLowerCase();
@@ -149,19 +164,13 @@ export class NuevoTicketComponent implements OnInit {
           else if (byName.endsWith('.jpg') || byName.endsWith('.jpeg')) mime = 'image/jpeg';
           else if (byName.endsWith('.png')) mime = 'image/png';
         }
-
-        // 2) Reparar dataUri si vino como "data:;base64,...."
         var dataUri = String(res.dataUri);
         if (dataUri.indexOf('data:;base64,') === 0 && mime) {
           dataUri = 'data:' + mime + ';base64,' + dataUri.split(';base64,')[1];
         }
-
-        // 3) Decidir si es PDF
         var isPdf = (mime && mime.indexOf('pdf') !== -1) || name.toLowerCase().endsWith('.pdf');
-
-        // 4) Abrir modal
         this.openPreview(name, mime, dataUri);
-        this.isPdf = isPdf; // si tu openPreview no recalcula isPdf, deja esta línea
+        this.isPdf = isPdf;
       },
       error: (err) => console.error('Error base64-from-path:', err)
     });
@@ -172,7 +181,6 @@ export class NuevoTicketComponent implements OnInit {
     var reader = new FileReader();
     reader.onload = () => {
       var dataUri = String(reader.result || '');
-      // Si el file.type viene vacío, intenta deducir del dataUri
       var mime = file.type || (dataUri.indexOf(';base64,') > -1 ? dataUri.split(';base64,')[0].replace('data:', '') : '');
       this.openPreview(file.name, mime, dataUri);
     };
@@ -231,12 +239,41 @@ export class NuevoTicketComponent implements OnInit {
 
   onSelect(event: any) {
     const allowed = ['image/jpeg','image/jpg','image/png','application/pdf'];
-    const max = 2 * 1024 * 1024; // 2MB
-    for (const file of event.addedFiles) {
-      if (!allowed.includes(file.type)) { alert(`Tipo no permitido: ${file.name}`); continue; }
-      if (file.size > max)          { alert(`Máximo 2MB: ${file.name}`); continue; }
+    const maxBytes = 5 * 1024 * 1024;
+
+    const totalActual = this.files.length + this.existingFiles.length;
+    const espacioRestante = this.MAX_FILES - totalActual;
+
+    if (espacioRestante <= 0) {
+      swal.fire('Límite alcanzado', `Solo se permite un máximo de ${this.MAX_FILES} archivos.`, 'warning');
+      return;
+    }
+
+    const aAgregar: File[] = (event.addedFiles || []).slice(0, espacioRestante);
+
+    let rechazados: string[] = [];
+    for (const file of aAgregar) {
+      if (!allowed.includes(file.type)) {
+        rechazados.push(`${file.name} (tipo no permitido)`);
+        continue;
+      }
+      if (file.size > maxBytes) {
+        rechazados.push(`${file.name} (máx. 2MB)`);
+        continue;
+      }
       const exists = this.files.some(f => f.name===file.name && f.size===file.size && f.type===file.type);
-      if (!exists) this.files.push(file);
+      if (exists) continue;
+
+      this.files.push(file);
+    }
+
+    const sobrantes = (event.addedFiles || []).length - aAgregar.length;
+    if (sobrantes > 0) {
+      rechazados.push(`${sobrantes} archivo(s) extra por encima del límite (${this.MAX_FILES}).`);
+    }
+
+    if (rechazados.length) {
+      swal.fire('Algunos archivos no se agregaron', rechazados.join('<br>'), 'info');
     }
   }
 
