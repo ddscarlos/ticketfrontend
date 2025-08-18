@@ -10,9 +10,7 @@
                 <div data-simplebar style="max-height: 500px; overflow-y: auto;" class="p-3 pt-0">
                     <ul class="acitivity-timeline-2 list-unstyled mb-0">
                         <li *ngFor="let traz of dataTrazabilidad">
-                            <h6 class="fs-14">
-                            {{ traz.trz_mensaj }}
-                            </h6>
+                            <h6 class="fs-14" [innerHTML]="traz.trz_mensaj"></h6>
                             <p class="mb-1">
                             <i class="ri-user-3-line"></i> {{ traz.trz_usunom }}
                             </p>

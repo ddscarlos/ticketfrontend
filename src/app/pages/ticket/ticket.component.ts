@@ -52,8 +52,8 @@ export class TicketComponent implements OnInit {
   tkt_id: string = '';
   tkt_numero: string = '';
   est_id: string = '';
-  tea_id: string = '';
-  pri_id: string = '';
+  tea_id: string = '0';
+  pri_id: string = '0';
   equ_id: string = '';
   age_id: string = '';
   usu_id: string = '';
@@ -201,7 +201,7 @@ export class TicketComponent implements OnInit {
       p_est_id: (this.est_id == null || this.est_id === '') ? 0 : parseInt(this.est_id),
       p_tea_id: (this.tea_id == null || this.tea_id === '') ? 0 : parseInt(this.tea_id),
       p_pri_id: (this.pri_id == null || this.pri_id === '') ? 0 : parseInt(this.pri_id),
-      p_age_id: (this.age_id == null || this.age_id === '') ? 0 : parseInt(this.age_id),
+      p_age_id: (localStorage.getItem('age_id') == null || localStorage.getItem('age_id') === '' ) ? 0 : parseInt(localStorage.getItem('age_id')),
       p_usu_id: (this.usu_id == null || this.usu_id === '') ? 0 : parseInt(this.usu_id),
       p_tkt_fecini: this.tkt_fecini,
       p_tkt_fecfin: this.tkt_fecfin,

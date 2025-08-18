@@ -69,13 +69,15 @@ export class LoginComponent implements OnInit {
               swal.fire('Error', 'No se encontraron datos del usuario', 'error');
               return;
             }
+            const ageId = (datos && datos.length && datos[0] && datos[0].age_id != null) ? datos[0].age_id : 0;
+            localStorage.setItem('age_id', String(ageId));
 
-            localStorage.setItem('age_id', datos[0].age_id);
             localStorage.setItem('usu_apepat', datos[0].usu_apepat);
             localStorage.setItem('usu_apemat', datos[0].usu_apemat);
             localStorage.setItem('usu_nombre', datos[0].usu_nombre);
             localStorage.setItem('usu_nomcom', datos[0].usu_nomcom);
             localStorage.setItem('equ_id', datos[0].equ_id);
+            localStorage.setItem('usu_correo', datos[0].usu_correo);
             localStorage.setItem('usu_chkadm', datos[0].usu_chkadm);
             localStorage.setItem('age_chkall', datos[0].age_chkall);
             

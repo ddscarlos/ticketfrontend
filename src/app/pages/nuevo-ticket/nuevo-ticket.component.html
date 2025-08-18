@@ -46,6 +46,7 @@
               <div>
                 <label for="ori_id" class="form-label">ORIGEN</label>
                 <ng-select class="mayus" [(ngModel)]="ori_id">
+                    <ng-option value="0">Seleccionar Origen</ng-option>
                     <ng-option *ngFor="let item of dataOrigen" [value]="item.ori_id">{{item.ori_descri}}</ng-option>
                 </ng-select>
               </div>
@@ -55,7 +56,7 @@
                 <label for="tkt_numcel" class="form-label">NÚMERO DE CELULAR</label>
                 <div class="input-group input-group-sm">
                     <span class="input-group-text" id="tkt_numcel"><i class="ri-phone-fill"></i></span>
-                    <input type="text" class="form-control" placeholder="00000" id="tkt_numcel" [(ngModel)]="tkt_numcel" (keypress)="restrictNumeric($event)">
+                    <input type="text" class="form-control" placeholder="987-654-321" id="tkt_numcel" [(ngModel)]="tkt_numcel" (keypress)="restrictNumeric($event)">
                 </div>
               </div>
             </div>
@@ -109,7 +110,7 @@
                       </ngx-dropzone-label>
                     </ngx-dropzone-preview>
                   </ng-container>
-                  <ngx-dropzone-preview style="cursor: pointer;" *ngIf="existingFiles?.length > 0 && (existingFiles.length + files.length) < MAX_FILES" (click)="onAddClick($event, dz)" style="cursor: pointer;">
+                  <ngx-dropzone-preview style="cursor: pointer;" *ngIf="totalFiles < MAX_FILES" (click)="onAddClick($event, dz)">
                     <ngx-dropzone-label>
                       <div class="dz-file">
                         <i class="ri-add-box-fill"></i>

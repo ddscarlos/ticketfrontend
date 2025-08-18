@@ -87,6 +87,10 @@ export class NuevoTicketComponent implements OnInit {
     this.loadTemadeAyuda();
   }
 
+  get totalFiles(): number {
+    return (this.existingFiles.length || 0) + (this.files.length || 0);
+  }
+
   loadData() {
     this.loading = true;
     const data_post = {
@@ -321,6 +325,7 @@ export class NuevoTicketComponent implements OnInit {
     formData.append("p_tkt_id", this.tkt_id === '0' ? "0" : this.tkt_id);
     formData.append("p_tea_id", String(this.tea_id));
     formData.append("p_usu_id", String(localStorage.getItem("usuario")));
+    formData.append("p_usu_correo", String(localStorage.getItem("usu_correo")));
     formData.append("p_ori_id", String(this.ori_id));
     formData.append("p_tkp_numero", "");
     formData.append("p_tkt_asunto", this.tkt_asunto);
