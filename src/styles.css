@@ -36,7 +36,6 @@ agm-map {
   justify-content: center;
 }
 
-
 table.dataTable tbody>tr.selected,
 table.dataTable tbody>tr>.selected {
     background-color: #0059edbf !important;

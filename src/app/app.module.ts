@@ -78,7 +78,7 @@ registerLocaleData(localeEs);
       apiKey: "",
       libraries: ["places"],
     }),
-    RouterModule.forRoot(ROUTES, { useHash: false }),
+    RouterModule.forRoot(ROUTES, { useHash: false, scrollPositionRestoration: 'enabled' }),
     NgSelectModule,
     FormsModule
   ],

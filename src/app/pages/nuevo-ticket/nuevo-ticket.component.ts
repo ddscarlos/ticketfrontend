@@ -8,6 +8,7 @@ import { TemplateRef, ViewChild } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NgxDropzoneComponent } from 'ngx-dropzone';
+import { Observable } from 'rxjs';
 
 type ExistingFile = {
   arc_id: number;
@@ -26,7 +27,6 @@ export class NuevoTicketComponent implements OnInit {
   titulopant : string = "Registro | Edición de Ticket";
   txtbtn : string = "";
   icono : string = "pe-7s-next-2";
-  loading: boolean = false;
   files: File[] = [];
   existingFiles: ExistingFile[] = [];
   demoMode = true;
@@ -41,18 +41,28 @@ export class NuevoTicketComponent implements OnInit {
   previewName = '';
   previewMime = '';
   isPdf = false;
+  ShowColmUsuario : boolean = true;
 
   dataTemaAyuda:any;
+  dataUsuarios:any;
   dataOrigen:any;
 
   tkt_id : string = '0';
   tea_id : string = '0';
   usu_id : string = '0';
-  ori_id: number = 1;
+  ori_id: number = 0;
+  tkt_usutkt: number = 0;
   tkp_numero : string = '';
   tkt_asunto : string = '';
   tkt_observ : string = '';
   tkt_numcel : string = '';
+  blockinpt : boolean = false;
+  disususoli : boolean = false;
+
+  private _pendingLoads = 0;
+  get loading(): boolean { return this._pendingLoads > 0; }
+  private startLoading() { this._pendingLoads++; }
+  private stopLoading() { if (this._pendingLoads > 0) this._pendingLoads--; }
 
   constructor(
     private router: Router,
@@ -63,28 +73,36 @@ export class NuevoTicketComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loading = true;
-    
-    if (this.demoMode) {
-      this.preloadDemoFiles();
+    this.loadDataUsuariotkt();
+    const isEdit = !!this.route.snapshot.paramMap.get('id');
+    if (isEdit) {
+      this.tkt_id = String(this.route.snapshot.paramMap.get('id'));
+      this.txtbtn = "Actualizar Ticket";
+      this.blockinpt = true;
+      this.loadData();
+    } else {
+      this.ori_id = 1;
+      this.tkt_id = '0';
+      this.files = [];
+      this.existingFiles = [];
+      this.txtbtn = "Generar Ticket";
+      this.blockinpt = false;
     }
 
+    /* if (Number(localStorage.getItem('prf_id')) != 4 && Number(localStorage.getItem('prf_id')) != 5 ) {
+      this.ShowColmUsuario = true;
+    } else {
+      this.ShowColmUsuario = false;
+    } */
+
     this.loadOrigen();
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
-      if (id) {
-        this.tkt_id = id;
-        this.loadData();        // EDITAR
-        this.txtbtn = "Actualizar Ticket";
-      } else {
-        this.tkt_id = '0';      // NUEVO
-        this.loading = false;
-        this.files = [];
-        this.existingFiles = [];
-        this.txtbtn = "Generar Ticket";
-      }
-    });
     this.loadTemadeAyuda();
+  }
+
+
+  private withLoading<T>(obs$: Observable<T>) {
+    this.startLoading();
+    return obs$.pipe(finalize(() => this.stopLoading()));
   }
 
   get totalFiles(): number {
@@ -92,38 +110,30 @@ export class NuevoTicketComponent implements OnInit {
   }
 
   loadData() {
-    this.loading = true;
-    const data_post = {
-      p_tkt_id:parseInt(this.tkt_id)
-    };
-
-    this.api.getticketver(data_post)
-    .pipe(finalize(() => this.loading = false))
-    .subscribe((data: any) => {
-      const row = (data && data.length > 0) ? data[0] : {};
-      this.tkt_asunto = row.tkt_asunto;
-      this.tea_id     = row.tea_id;
-      this.ori_id     = row.ori_id;
-      this.tkt_numcel = row.tkt_numcel;
-      this.tkt_observ = row.tkt_observ;
-
-      // archivos existentes
-      this.existingFiles = [];
-      try {
-        const arr = JSON.parse(row.jsn_archiv || '[]');
-        this.existingFiles = arr.map(function(a: any) {
-          return {
+    const data_post = { p_tkt_id: parseInt(this.tkt_id) };
+    this.withLoading(this.api.getticketver(data_post))
+      .subscribe((data: any) => {
+        const row = (data && data.length > 0) ? data[0] : {};
+        this.tkt_asunto = row.tkt_asunto;
+        this.tea_id     = row.tea_id;
+        this.ori_id     = row.ori_id;
+        this.tkt_usutkt = row.usu_id;
+        this.tkt_numcel = row.tkt_numcel;
+        this.tkt_observ = row.tkt_observ;
+        
+        try {
+          const arr = JSON.parse(row.jsn_archiv || '[]');
+          this.existingFiles = arr.map((a: any) => ({
             arc_id: a.arc_id,
             name  : a.arc_nombre,
             type  : this.mimeFromExt(a.arc_nombre),
             path  : (a.rut_archiv || ''),
-            isRemote: true
-          };
-        }.bind(this));
-      } catch (e) { /* noop */ }
+            isRemote: true as boolean,
+          }));
+        } catch { this.existingFiles = []; }
 
-      this.files = [];
-    }, _ => {});
+        this.files = [];
+      });
   }
 
   private openPreview(name: string, mime: string, dataUri: string) {
@@ -201,26 +211,38 @@ export class NuevoTicketComponent implements OnInit {
   }
 
   loadTemadeAyuda() {
+    const data_post = { p_tea_id: 0, p_tea_idpadr: 0, p_tea_activo: 1 };
+    this.withLoading(this.api.gettemaayudasel(data_post))
+      .subscribe((data: any) => this.dataTemaAyuda = data);
+  }
+  
+  loadDataUsuariotkt() {
     const data_post = {
-      p_tea_id: 0,
-      p_tea_idpadr: 0,
-      p_tea_activo: 1
+      p_usu_id: Number(localStorage.getItem("usuario")),
+      p_usu_apepat: '',
+      p_usu_apemat: '',
+      p_usu_nombre: ''
     };
 
-    this.api.gettemaayudasel(data_post).subscribe((data: any) => {
-      this.dataTemaAyuda = data;
-    });
+    this.withLoading(this.api.getDataUsuariotkt(data_post))
+      .subscribe({
+        next: (data: any) => {
+          this.dataUsuarios = data;
+          if (this.dataUsuarios.length === 1) {
+            this.tkt_usutkt = data[0].usu_id;
+            this.disususoli = true;
+          }else{
+            this.tkt_usutkt = Number(localStorage.getItem('usuario'));
+            this.disususoli = false;
+          }
+        },
+        error: (err) => console.error('Error cargando usuarios', err)
+      });
   }
   
   loadOrigen() {
-    const data_post = {
-      p_ori_id: 0,
-      p_ori_activo: 1
-    };
-
-    this.api.getDataOrigensel(data_post).subscribe((data: any) => {
-      this.dataOrigen = data;
-    });
+    const data_post = { p_ori_id: 0, p_ori_activo: 1 };
+    this.withLoading(this.api.getDataOrigensel(data_post)).subscribe((data: any) => this.dataOrigen = data);
   }
   
   restrictNumeric(e) {
@@ -286,7 +308,9 @@ export class NuevoTicketComponent implements OnInit {
   }
 
   async onRemoveExisting(f: ExistingFile) {
-    const ok = await swal.fire({
+    if (this.loading) return;
+
+    const isConfirmed = await swal.fire({
       title: '¿Eliminar archivo?',
       text: f.name,
       icon: 'warning',
@@ -295,42 +319,53 @@ export class NuevoTicketComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then(r => r.isConfirmed);
 
-    if (!ok) return;
+    if (!isConfirmed) return;
 
     const payload = {
       p_arc_id: f.arc_id,
       p_arc_usumov: Number(localStorage.getItem('usuario') || 0)
     };
 
-    this.loading = true;
-    this.api.getarchivosanu(payload).pipe(finalize(() => this.loading = false)).subscribe({
-      next: (res: any) => {
-        let err;
-        if (Array.isArray(res)) {
-          err = res.length > 0 ? res[0].error : undefined;
+    const arcId = f.arc_id;
+
+    this.startLoading();
+    this.api.getarchivosanu(payload)
+      .pipe(finalize(() => this.stopLoading()))
+      .subscribe({
+        next: (res: any) => {
+          const result = Array.isArray(res) ? res[0] : res;
+          const ok = result && (result.error === 0 || typeof result.error === 'undefined');
+
+          // asegura el mensaje, si existe
+          const mensaje = result && result.mensa ? String(result.mensa).trim() : '';
+
+          if (ok) {
+            this.existingFiles = this.existingFiles.filter(x => x.arc_id !== arcId);
+            swal.fire('Eliminado', mensaje || 'Archivo eliminado', 'success');
+          } else {
+            swal.fire('Advertencia', mensaje || 'No se pudo eliminar', 'warning');
+          }
+        },
+        error: (err) => {
+          console.error('Error al eliminar archivo:', err);
+          swal.fire('Error', 'No se pudo eliminar', 'error');
         }
-        if (err === 0 || typeof err === 'undefined') {
-          this.existingFiles = this.existingFiles.filter(function(x) { return x.arc_id !== f.arc_id; });
-          swal.fire('Eliminado', 'Archivo eliminado', 'success');
-        } else {
-          swal.fire('Advertencia', 'No se pudo eliminar', 'warning');
-        }
-      },
-      error: _ => swal.fire('Error', 'No se pudo eliminar', 'error')
-    });
+      });
   }
+
 
   procesaRegistro() {
     const formData = new FormData();
     formData.append("p_tkt_id", this.tkt_id === '0' ? "0" : this.tkt_id);
     formData.append("p_tea_id", String(this.tea_id));
-    formData.append("p_usu_id", String(localStorage.getItem("usuario")));
+    formData.append("p_usu_id", String(this.tkt_usutkt));
     formData.append("p_usu_correo", String(localStorage.getItem("usu_correo")));
     formData.append("p_ori_id", String(this.ori_id));
     formData.append("p_tkp_numero", "");
     formData.append("p_tkt_asunto", this.tkt_asunto);
     formData.append("p_tkt_observ", (this.tkt_observ || '').toUpperCase());
     formData.append("p_tkt_numcel", this.tkt_numcel || "");
+    formData.append("p_tkt_usutkt", String(localStorage.getItem("usuario")));
     this.files.forEach(f => formData.append("files[]", f));
 
     swal

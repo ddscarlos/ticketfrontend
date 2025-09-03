@@ -80,6 +80,7 @@ export class LoginComponent implements OnInit {
             localStorage.setItem('usu_correo', datos[0].usu_correo);
             localStorage.setItem('usu_chkadm', datos[0].usu_chkadm);
             localStorage.setItem('age_chkall', datos[0].age_chkall);
+            localStorage.setItem('prf_id', datos[0].prf_id);
             
             const dataMenu = {
               p_usu_id: res.user.id,
