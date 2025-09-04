@@ -86,7 +86,7 @@ export class LoginComponent implements OnInit {
               p_usu_id: res.user.id,
             };
 
-            this.api.getSeguridadpermisoobjetosel(dataMenu).subscribe({
+            this.api.getSeguridadperfilusuarioobjetosel(dataMenu).subscribe({
               next: (datosMenu: any) => {
                 localStorage.setItem('objetosMenu', JSON.stringify(datosMenu));
                 this.loading = false;

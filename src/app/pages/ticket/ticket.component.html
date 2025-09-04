@@ -95,19 +95,19 @@
     <div class="col-xl-12">
       <div class="card">
         <div class="card-body p-0">
-          <div class="table-responsive" id="tablaDataProceso">
-            <table class="table align-middle table-nowrap mb-0" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+          <div class="dt-mobile-scroll">
+            <table class="table align-middle table-nowrap mb-0 table--wide" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
               <thead>
                 <tr style="text-align: center;">
-                  <th scope="col">N° TICKET</th>
-                  <th scope="col">SOLICITADO POR.</th>
-                  <th scope="col">ASUNTO</th>
-                  <th scope="col">AGENTE ASIG.</th>
-                  <th scope="col">PRIORIDAD</th>
-                  <th scope="col">ESTADO</th>
-                  <th scope="col">FECHA DE CREACIÓN</th>
-                  <th scope="col">FECHA ULTIMO MOV.</th>
-                  <th scope="col">ACCIONES</th>
+                  <th scope="col" data-priority="3">N° TICKET</th>
+                  <th scope="col" data-priority="4">SOLICITADO POR.</th>
+                  <th scope="col" data-priority="2" class="col-asunto">ASUNTO</th>
+                  <th scope="col" data-priority="5">AGENTE ASIG.</th>
+                  <th scope="col" data-priority="1">PRIORIDAD</th>
+                  <th scope="col" data-priority="1">ESTADO</th>
+                  <th scope="col" data-priority="6">FECHA DE CREACIÓN</th>
+                  <th scope="col" data-priority="6">FECHA ULTIMO MOV.</th>
+                  <th scope="col" data-priority="1">ACCIONES</th>
                 </tr>
               </thead>
               <tbody>
@@ -124,15 +124,13 @@
                   <td>{{item.tkt_fecumo}}</td>
                   <td>
                     <div class="dropdown">
-                        <button class="btn btn-soft-primary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="ri-more-fill align-middle"></i>
-                        </button>
+                      <button type="button" class="btn btn-outline-primary btn-icon btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-align-justify"></i></button>
                         <ul class="dropdown-menu dropdown-menu-end" [attr.data-bs-container]="'body'">
                           <li *ngIf="item.chk_botedt"><a class="dropdown-item edit-item-btn" (click)="TicketEdit(item.tkt_id)">EDITAR</a></li>
                           <li *ngIf="item.chk_botanu"><a class="dropdown-item edit-item-btn" (click)="getIdButton(3, item)">ANULAR</a></li>
                           <li *ngIf="item.chk_botver"><a class="dropdown-item edit-item-btn" (click)="getIdButton(4, item)">VER</a></li>
                           <li *ngIf="item.chk_botasg"><a class="dropdown-item edit-item-btn" (click)="getIdButton(6, item)">ASIGNAR</a></li>
-                          <li *ngIf="item.chk_botena"><a class="dropdown-item edit-item-btn" (click)="getIdButton(7, item)">EN ATENCION</a></li>
+                          <li *ngIf="item.chk_botena"><a class="dropdown-item edit-item-btn" (click)="getIdButton(7, item)">ATENDER</a></li>
                           <li *ngIf="item.chk_botres"><a class="dropdown-item edit-item-btn" (click)="getIdButton(8, item)">RESPONDER</a></li>
                           <li *ngIf="item.chk_botval"><a class="dropdown-item edit-item-btn" (click)="getIdButton(9, item)">VALIDAR</a></li>
                           <li *ngIf="item.chk_botcer"><a class="dropdown-item edit-item-btn" (click)="getIdButton(10, item)">CERRAR</a></li>

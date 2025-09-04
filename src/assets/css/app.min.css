@@ -584,7 +584,7 @@ a.close.disabled {
     }
 }
 .page-content{
-    padding:calc(30px + 30px + 1.5rem) calc(1.5rem * .7) 60px calc(1.5rem * .5)
+    padding:calc(30px + 30px + 1rem) calc(1.5rem * .7) 60px calc(1.5rem * .5)
 }
 .navbar-menu{
     width:250px;

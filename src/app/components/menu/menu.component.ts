@@ -1,24 +1,149 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router, NavigationEnd, UrlTree } from '@angular/router';
+import { filter } from 'rxjs/operators';
+
+interface RawItem {
+  obj_id: number;
+  obj_descri: string;
+  obj_abrevi?: string | null;
+  obj_idpadr?: number | null;
+  jsn_permis?: string | null;
+  obj_enlace?: string | null;
+}
+
+interface MenuNode {
+  id: number;
+  label: string;
+  parentId: number | null;
+  enlace: string;
+  children: MenuNode[];
+  expanded?: boolean;     // << estado UI
+}
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.css']
 })
-export class MenuComponent {
-  objetomenu: any[] = [];
+export class MenuComponent implements OnInit {
+  menuTree: MenuNode[] = [];
+
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
-    this.getObjetosMenu();
-    console.log("Objetos del menú:", this.objetomenu);
+    const raw = this.readFromStorage();
+    this.menuTree = this.buildMenuTree(raw);
+
+    // abrir ramas cuya ruta esté activa al cargar y en cada navegación
+    this.markActiveBranches();
+    this.router.events.pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe(() => this.markActiveBranches());
   }
 
-  getObjetosMenu() {
-    const ObjetoMenuString = localStorage.getItem('objetosMenu');
-    if (ObjetoMenuString) {
-      this.objetomenu = JSON.parse(ObjetoMenuString);
-    } else {
-      this.objetomenu = [];
+  // ---------- helpers de datos ----------
+  private readFromStorage(): RawItem[] {
+    const s = localStorage.getItem('objetosMenu');
+    if (!s) return [];
+    try { return JSON.parse(s) as RawItem[]; }
+    catch { return []; }
+  }
+
+  private buildMenuTree(items: RawItem[]): MenuNode[] {
+    const map: { [id: number]: MenuNode } = {};
+    const roots: MenuNode[] = [];
+
+    for (let i = 0; i < items.length; i++) {
+      const r = items[i];
+      const parentId = (typeof r.obj_idpadr === 'number') ? r.obj_idpadr : null;
+      const enlace = (r.obj_enlace != null && r.obj_enlace !== '')
+        ? String(r.obj_enlace)
+        : this.guessLink(r);
+
+      map[r.obj_id] = {
+        id: r.obj_id,
+        label: r.obj_descri,
+        parentId,
+        enlace,
+        children: [],
+        expanded: false
+      };
     }
+
+    for (const idStr in map) {
+      if (!map.hasOwnProperty(idStr)) continue;
+      const node = map[+idStr];
+      if (node.parentId != null && map[node.parentId]) {
+        map[node.parentId].children.push(node);
+      } else {
+        roots.push(node);
+      }
+    }
+
+    const sortRec = (arr: MenuNode[]) => {
+      arr.sort((a, b) => a.label.localeCompare(b.label));
+      for (let i = 0; i < arr.length; i++) sortRec(arr[i].children);
+    };
+    sortRec(roots);
+
+    return roots;
+  }
+
+  private guessLink(r: RawItem): string { return this.slugify(r.obj_descri); }
+
+  slugify(s: string): string {
+    if (!s) return '';
+    return s.toString()
+      .replace(/[ÁÀÂÄáàâä]/g, 'a')
+      .replace(/[ÉÈÊËéèêë]/g, 'e')
+      .replace(/[ÍÌÎÏíìîï]/g, 'i')
+      .replace(/[ÓÒÔÖóòôö]/g, 'o')
+      .replace(/[ÚÙÛÜúùûü]/g, 'u')
+      .replace(/Ñ/g, 'n').replace(/ñ/g, 'n')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+  }
+
+  trackById(_i: number, n: MenuNode) { return n.id; }
+
+  // ---------- helpers de UI/Router ----------
+  private buildFullPath(parentPath: string, node: MenuNode): string {
+    return parentPath ? `${parentPath}/${node.enlace}` : node.enlace;
+  }
+
+  isActiveRoute(path: string): boolean {
+    // compara usando Router para que coincida con rutas hijas
+    const tree: UrlTree = this.router.parseUrl('/' + path);
+    return this.router.isActive(tree, false);
+  }
+
+  toggle(node: MenuNode, event: Event) {
+    event.preventDefault();
+    node.expanded = !node.expanded;
+  }
+
+  private collapseAll(nodes: MenuNode[]) {
+    for (const n of nodes) {
+      n.expanded = false;
+      this.collapseAll(n.children);
+    }
+  }
+
+  private expandPathByPredicate(nodes: MenuNode[], parentPath: string, pred: (full: string) => boolean): boolean {
+    // devuelve true si en esta rama hay algo activo (para abrir ancestros)
+    let anyActive = false;
+    for (const n of nodes) {
+      const full = this.buildFullPath(parentPath, n);
+      const childHasActive = this.expandPathByPredicate(n.children, full, pred);
+      const selfActive = pred(full);
+      n.expanded = childHasActive || (selfActive && n.children.length > 0);
+      anyActive = anyActive || childHasActive || selfActive;
+    }
+    return anyActive;
+  }
+
+  private markActiveBranches() {
+    this.collapseAll(this.menuTree);
+    this.expandPathByPredicate(this.menuTree, '', (full) => this.isActiveRoute(full));
   }
 }

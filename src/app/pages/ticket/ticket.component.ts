@@ -21,6 +21,9 @@ interface PermisoBtn {
 })
 
 export class TicketComponent implements OnInit {
+  
+  private isXs(): boolean { return window.innerWidth < 768; }
+
   private permSet = new Set<number>();
 
   btnPerm = {
@@ -86,23 +89,32 @@ export class TicketComponent implements OnInit {
   dtOptions: any = {
     destroy: false,
     retrieve: true,
-    pagingType: "full_numbers",
+    pagingType: 'full_numbers',
     pageLength: 10,
-    dom: "Bfrtip",
-    buttons: ["excel"],
+    dom: 'Bfrtip',
+    buttons: ['excel'],
     select: true,
-    responsive: true,
     autoWidth: false,
     searching: true,
+    responsive: {
+      details: {
+        type: 'inline',
+        target: 'tr'
+      },
+      breakpoints: [
+        { name: 'xl', width: Infinity },
+        { name: 'lg', width: 1400 },
+        { name: 'md', width: 1200 },
+        { name: 'sm', width: 992 },
+        { name: 'xs', width: 768 }
+      ]
+    },
     columnDefs: [
-      { width: "10px", targets: 0 },
-      { width: "100px", targets: 1 },
-      { width: "500px", targets: 2 },
-      { width: "100px", targets: 3 },
-      { width: "50px", targets: 4 },
-      { width: "20px", targets: 5 },
-      { width: "20px", targets: 6 },
-      { width: "20px", targets: 7 },
+      { targets: [0,1,3], responsivePriority: 3 }, // Nº, Solicitado, Agente
+      { targets: 2,  responsivePriority: 2, className: 'dt-col-asunto' }, // ASUNTO (puede ocultarse después)
+      { targets: [4,5], responsivePriority: 1 }, // PRIORIDAD / ESTADO
+      { targets: [6,7], responsivePriority: 4 },  // Fechas (se ocultan primero)
+      { targets: 8,  responsivePriority: 1 } // ACCIONES
     ],
     rowCallback: (row: Node, data: any[] | Object, index: number) => {
       const self = this;
@@ -166,10 +178,43 @@ export class TicketComponent implements OnInit {
     this.loadEstado();
     this.loadPrioridad();
     this.loadTemadeAyuda();
-    this.loadDataProceso();
     this.getObjetoMenu();
     this.ObtenerObjId();
+    this.loadDataProceso();
     console.log(this.ObjetoMenu[0]);
+    
+    const onMobile = this.isXs();
+
+    this.dtOptions = {
+      destroy: false,
+      retrieve: true,
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      dom: 'Bfrtip',
+      buttons: ['excel'],
+      select: true,
+      autoWidth: false,
+      searching: true,
+      responsive: onMobile ? false : {
+        details: { type: 'inline', target: 'tr' },
+        breakpoints: [
+          { name: 'xl', width: Infinity },
+          { name: 'lg', width: 1400 },
+          { name: 'md', width: 1200 },
+          { name: 'sm', width: 992 },
+          { name: 'xs', width: 768 }
+        ]
+      },
+      scrollX: false,
+      columnDefs: [
+        { targets: 8,  responsivePriority: 0 }, // ACCIONES
+        { targets: 0,  responsivePriority: 1 }, // N°
+        { targets: [4,5], responsivePriority: 2 }, // PRIORIDAD/ESTADO
+        { targets: 2,  responsivePriority: 3, className: 'dt-col-asunto' }, // ASUNTO
+        { targets: [1,3], responsivePriority: 4 }, // SOLICITADO/AGENTE
+        { targets: [6,7], responsivePriority: 5 }  // FECHAS
+      ]
+    };
   }
 
   ngOnDestroy(): void {
@@ -183,8 +228,14 @@ export class TicketComponent implements OnInit {
 
   ngAfterViewInit() {
     this.dtTrigger.next();
+    setTimeout(() => {
+      this.dtElement.dtInstance.then((dt: any) => {
+        dt.columns.adjust();
+        if (dt.responsive && dt.responsive.recalc) dt.responsive.recalc();
+      });
+    }, 0);
   }
-  
+
   CerrarModalProceso() {
     this.loadDataProceso();
     if (this.modalRef) {

@@ -38,6 +38,11 @@ import { ModalAtencionComponent } from './components/modal-atencion/modal-atenci
 import { ModalTrazabilidadComponent } from './components/modal-trazabilidad/modal-trazabilidad.component';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { ModalPreviewComponent } from './components/modal-preview/modal-preview.component';
+import { FixDropdownOverflowDirectiveDirective } from './directives/fix-dropdown-overflow-directive.directive';
+import { ActionMenuComponent } from './components/action-menu/action-menu.component';
+import { OverlayModule }   from '@angular/cdk/overlay';
+import { PortalModule }    from '@angular/cdk/portal';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 registerLocaleData(localeEs);
 
@@ -60,7 +65,9 @@ registerLocaleData(localeEs);
     ModalVerComponent,
     ModalAtencionComponent,
     ModalTrazabilidadComponent,
-    ModalPreviewComponent
+    ModalPreviewComponent,
+    FixDropdownOverflowDirectiveDirective,
+    ActionMenuComponent
   ],
   imports: [
     BrowserModule,
@@ -80,7 +87,10 @@ registerLocaleData(localeEs);
     }),
     RouterModule.forRoot(ROUTES, { useHash: false, scrollPositionRestoration: 'enabled' }),
     NgSelectModule,
-    FormsModule
+    FormsModule,
+    OverlayModule,
+    PortalModule,
+    ScrollingModule
   ],
   providers: [
     NgSelectConfig,
@@ -95,6 +105,8 @@ registerLocaleData(localeEs);
       useValue: 'es-PE'
     }
   ],
+  entryComponents: [ActionMenuComponent],
+  exports: [ActionMenuComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

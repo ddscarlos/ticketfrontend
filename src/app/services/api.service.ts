@@ -88,8 +88,8 @@ export class ApiService {
       );
     }
   
-  getSeguridadpermisoobjetosel(data: object) {
-    return this.postQuery("seguridad/permisoobjetosel", data).pipe(
+  getSeguridadperfilusuarioobjetosel(data: object) {
+    return this.postQuery("seguridad/perfilusuarioobjetosel", data).pipe(
       map((data) => {
         return data;
       })
