@@ -12,13 +12,13 @@
                         <li *ngFor="let traz of dataTrazabilidad">
                             <h6 class="fs-14" [innerHTML]="traz.trz_mensaj"></h6>
                             <p class="mb-1">
-                            <i class="ri-user-3-line"></i> {{ traz.trz_usunom }}
+                                <i class="ri-user-3-line"></i> {{ traz.trz_usunom }}
                             </p>
                             <p class="mb-1">
-                            <i class="ri-calendar-line"></i> {{ traz.trz_fecreg | date:'fullDate' }}
+                                <i class="ri-calendar-line"></i> {{ traz.trz_fecreg | date:'fullDate' }} - {{ traz.trz_fecreg | date:'HH:mm:ss' }}
                             </p>
                             <p class="text-muted mb-2" *ngIf="traz.trz_observ">
-                            <i class="ri-file-text-line"></i> {{ traz.trz_observ }}
+                                <i class="ri-file-text-line"></i> {{ traz.trz_observ }}
                             </p>
                             <hr class="my-2" />
                         </li>

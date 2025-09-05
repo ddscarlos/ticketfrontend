@@ -1,4 +1,4 @@
-import { Component,TemplateRef,OnInit,Input,ViewChild} from "@angular/core";
+import { Component,TemplateRef,OnInit,Input,ViewChild,HostListener} from "@angular/core";
 import { Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
 import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
@@ -207,13 +207,59 @@ export class TicketComponent implements OnInit {
       },
       scrollX: false,
       columnDefs: [
-        { targets: 8,  responsivePriority: 0 }, // ACCIONES
-        { targets: 0,  responsivePriority: 1 }, // N°
-        { targets: [4,5], responsivePriority: 2 }, // PRIORIDAD/ESTADO
+        { targets: 8,  responsivePriority: 0 },     // ACCIONES (siempre visible)
+        { targets: 0,  responsivePriority: 1 },     // Nº
+        { targets: [4,5], responsivePriority: 2 },  // PRIORIDAD / ESTADO
         { targets: 2,  responsivePriority: 3, className: 'dt-col-asunto' }, // ASUNTO
-        { targets: [1,3], responsivePriority: 4 }, // SOLICITADO/AGENTE
-        { targets: [6,7], responsivePriority: 5 }  // FECHAS
-      ]
+        { targets: [1,3], responsivePriority: 4 },  // SOLICITADO / AGENTE
+        { targets: [6,7], responsivePriority: 5 }   // FECHAS (se ocultan antes)
+      ],
+      rowCallback: (row: Node, data: any[] | Object, index: number) => {
+      const self = this;
+      $("td", row).off("click");
+      $("td", row).on("click", () => {
+        this.rowSelected = data;
+        if (this.rowSelected !== this.dataanteriorseleccionada) {
+          this.dataanteriorseleccionada = this.rowSelected;
+        } else {
+          this.dataanteriorseleccionada = [];
+        }
+
+        const anular = document.getElementById('anular') as HTMLButtonElement | null;
+        if (anular) {
+          anular.disabled = false;
+        }
+      });
+      return row;
+    },
+    language: {
+      processing: "Procesando...",
+      search: "Buscar:",
+      lengthMenu: "Mostrar _MENU_ elementos",
+      info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+      infoEmpty: "Mostrando ningún elemento.",
+      infoFiltered: "(filtrado _MAX_ elementos total)",
+      loadingRecords: "Cargando registros...",
+      zeroRecords: "No se encontraron registros",
+      emptyTable: "No hay datos disponibles en la tabla",
+      select: {
+        rows: {
+          _: "%d filas seleccionadas",
+          0: "Haga clic en una fila para seleccionarla",
+          1: "Ticket seleccionado",
+        },
+      },
+      paginate: {
+        first: "Primero",
+        previous: "Anterior",
+        next: "Siguiente",
+        last: "Último",
+      },
+      aria: {
+        sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+        sortDescending: ": Activar para ordenar la tabla en orden descendente",
+      },
+    },
     };
   }
 
@@ -226,14 +272,19 @@ export class TicketComponent implements OnInit {
     btnExcel.click();
   }
 
+  @HostListener('window:resize') onResize() { this.adjustDt(); }
+
   ngAfterViewInit() {
     this.dtTrigger.next();
-    setTimeout(() => {
-      this.dtElement.dtInstance.then((dt: any) => {
-        dt.columns.adjust();
-        if (dt.responsive && dt.responsive.recalc) dt.responsive.recalc();
-      });
-    }, 0);
+    setTimeout(() => this.adjustDt(), 0);
+  }
+
+  private adjustDt() {
+    if (!this.dtElement) return;
+    this.dtElement.dtInstance.then((dt: any) => {
+      dt.columns.adjust();
+      if (dt.responsive.recalc) dt.responsive.recalc();
+    });
   }
 
   CerrarModalProceso() {

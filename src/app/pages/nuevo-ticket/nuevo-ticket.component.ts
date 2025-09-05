@@ -355,6 +355,8 @@ export class NuevoTicketComponent implements OnInit {
 
 
   procesaRegistro() {
+    if (this.loading) return;
+    
     const formData = new FormData();
     formData.append("p_tkt_id", this.tkt_id === '0' ? "0" : this.tkt_id);
     formData.append("p_tea_id", String(this.tea_id));
@@ -381,7 +383,7 @@ export class NuevoTicketComponent implements OnInit {
       })
       .then((result) => {
         if (result.isConfirmed) {
-          this.api.getticketsgra(formData).subscribe({
+          this.withLoading(this.api.getticketsgra(formData)).subscribe({
             next: (data: any) => {
               if (data[0].error == 0) {
                 swal

@@ -50,33 +50,35 @@
 <ng-template #renderNode let-node="node" let-level="level" let-parentPath="parentPath">
   <li class="nav-item" [ngClass]="{ 'has-children': node.children && node.children.length }">
 
-    <!-- Con hijos: colapsable -->
+    <!-- PADRE: abre/cierra con Bootstrap collapse -->
     <a *ngIf="node.children && node.children.length; else leafLink"
-       class="nav-link menu-link d-flex align-items-center collapsed"
-       [attr.href]="'#c' + node.id"
-       data-bs-toggle="collapse"
-       role="button"
-       aria-expanded="false"
-       [attr.aria-controls]="'c' + node.id">
+      class="nav-link menu-link d-flex align-items-center"
+      href="{{ '#c' + node.id }}"
+      data-bs-toggle="collapse"
+      role="button"
+      [attr.aria-controls]="'c' + node.id"
+      [attr.aria-expanded]="isBranchActive(node) ? 'true' : 'false'"
+      [class.collapsed]="!isBranchActive(node)">
       <i class="bi" [ngClass]="level === 0 ? 'bi-person-circle' : 'bi-dot'"></i>
       <span class="ms-2 flex-grow-1">{{ node.label }}</span>
     </a>
 
-    <!-- Hoja -->
+    <!-- HOJA: navega con Angular -->
     <ng-template #leafLink>
       <a class="nav-link menu-link d-flex align-items-center"
-         [routerLink]="['/', parentPath ? (parentPath + '/' + node.enlace) : node.enlace]"
-         routerLinkActive="active"
-         [routerLinkActiveOptions]="{ exact: false }">
+        [routerLink]="['/', normalizeLink(node.enlace)]"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }">
         <i class="bi" [ngClass]="level === 0 ? 'bi-hdd-stack' : 'bi-dot'"></i>
         <span class="ms-2">{{ node.label }}</span>
       </a>
     </ng-template>
 
-    <!-- Submenú -->
+    <!-- SUBMENÚ: Bootstrap gestionará show/hidden; forzamos 'show' si hay ruta activa -->
     <div *ngIf="node.children && node.children.length"
-         class="collapse menu-dropdown"
-         [attr.id]="'c' + node.id">
+        class="collapse menu-dropdown"
+        [id]="'c' + node.id"
+        [class.show]="isBranchActive(node)">
       <ul class="nav nav-sm flex-column">
         <ng-container *ngFor="let child of node.children; trackBy: trackById">
           <ng-container
@@ -84,7 +86,7 @@
             [ngTemplateOutletContext]="{
               node: child,
               level: level + 1,
-              parentPath: (parentPath ? parentPath + '/' : '') + node.enlace
+              parentPath: buildFullPath(parentPath, node)
             }">
           </ng-container>
         </ng-container>

@@ -721,8 +721,7 @@ setTimeout(() => {
                       e.style.display = "none";
                   }),
                   document.querySelector("#notificationItemsTabContent .empty-notification-elem") ||
-                      (document.getElementById("notificationItemsTabContent").innerHTML +=
-                          '<div class="empty-notification-elem text-center px-4">\t\t\t\t\t\t<div class="mt-3 avatar-md mx-auto">\t\t\t\t\t\t\t<div class="avatar-title bg-info-subtle text-info fs-24 rounded-circle">\t\t\t\t\t\t\t<i class="bi bi-bell "></i>\t\t\t\t\t\t\t</div>\t\t\t\t\t\t</div>\t\t\t\t\t\t<div class="pb-3 mt-2">\t\t\t\t\t\t\t<h6 class="fs-16 fw-semibold lh-base">Hey! You have no any notifications </h6>\t\t\t\t\t\t</div>\t\t\t\t\t</div>'));
+                      '');
             }, 1000);
         }
         function G() {

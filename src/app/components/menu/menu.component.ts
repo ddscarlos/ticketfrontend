@@ -55,14 +55,12 @@ export class MenuComponent implements OnInit {
     for (let i = 0; i < items.length; i++) {
       const r = items[i];
       const parentId = (typeof r.obj_idpadr === 'number') ? r.obj_idpadr : null;
-      const enlace = (r.obj_enlace != null && r.obj_enlace !== '')
-        ? String(r.obj_enlace)
-        : this.guessLink(r);
+      const enlace = (r.obj_enlace || '').replace(/^\/+/, '');
 
       map[r.obj_id] = {
         id: r.obj_id,
         label: r.obj_descri,
-        parentId,
+        parentId: (typeof r.obj_idpadr === 'number') ? r.obj_idpadr : null,
         enlace,
         children: [],
         expanded: false
@@ -80,7 +78,7 @@ export class MenuComponent implements OnInit {
     }
 
     const sortRec = (arr: MenuNode[]) => {
-      arr.sort((a, b) => a.label.localeCompare(b.label));
+      arr.sort((a, b) => a.id - b.id);
       for (let i = 0; i < arr.length; i++) sortRec(arr[i].children);
     };
     sortRec(roots);
@@ -111,6 +109,7 @@ export class MenuComponent implements OnInit {
     return parentPath ? `${parentPath}/${node.enlace}` : node.enlace;
   }
 
+
   isActiveRoute(path: string): boolean {
     // compara usando Router para que coincida con rutas hijas
     const tree: UrlTree = this.router.parseUrl('/' + path);
@@ -119,6 +118,7 @@ export class MenuComponent implements OnInit {
 
   toggle(node: MenuNode, event: Event) {
     event.preventDefault();
+    event.stopPropagation();
     node.expanded = !node.expanded;
   }
 
@@ -146,4 +146,49 @@ export class MenuComponent implements OnInit {
     this.collapseAll(this.menuTree);
     this.expandPathByPredicate(this.menuTree, '', (full) => this.isActiveRoute(full));
   }
+
+  goTo(parentPath: string, node: MenuNode, event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const full = this.buildFullPath(parentPath, node);
+    const segs = this.pathSegments(full);
+    this.router.navigate(['/', ...segs]);
+  }
+
+
+  /* isBranchActive(node: MenuNode, parentPath: string): boolean {
+    const base = this.buildFullPath(parentPath, node); // p.ej. 'reporte'
+    const current = this.router.url.replace(/^\//, ''); // sin slash inicial
+    if (!node.children || node.children.length === 0) {
+      return current.startsWith(base);
+    }
+    const selfActive = current.startsWith(base + '/');
+    return selfActive || node.children.some(child => this.isBranchActive(child, base));
+  } */
+
+  pathSegments(full: string): string[] {
+    return (full || '')
+      .replace(/^\/+/, '')          // quita slashes de inicio
+      .replace(/\/+$/, '')          // quita slashes de fin
+      .split('/')
+      .filter(Boolean);
+  }
+  
+  normalizeLink(s: string): string {
+    return (s || '').trim().replace(/^\/+|\/+$/g, '');
+  }
+
+  isLeafActive(node: MenuNode): boolean {
+    const curr = this.router.url.replace(/^\/+|\/+$/g, '');
+    const link = this.normalizeLink(node.enlace);
+    return curr === link;
+  }
+
+  isBranchActive(node: MenuNode): boolean {
+    if (!node.children || node.children.length === 0) {
+      return this.isLeafActive(node);
+    }
+    return node.children.some(ch => this.isBranchActive(ch));
+  }
+
 }
