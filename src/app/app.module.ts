@@ -40,9 +40,6 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { ModalPreviewComponent } from './components/modal-preview/modal-preview.component';
 import { FixDropdownOverflowDirectiveDirective } from './directives/fix-dropdown-overflow-directive.directive';
 import { ActionMenuComponent } from './components/action-menu/action-menu.component';
-import { OverlayModule }   from '@angular/cdk/overlay';
-import { PortalModule }    from '@angular/cdk/portal';
-import { ScrollingModule } from '@angular/cdk/scrolling';
 
 registerLocaleData(localeEs);
 
@@ -87,10 +84,7 @@ registerLocaleData(localeEs);
     }),
     RouterModule.forRoot(ROUTES, { useHash: false, scrollPositionRestoration: 'enabled' }),
     NgSelectModule,
-    FormsModule,
-    OverlayModule,
-    PortalModule,
-    ScrollingModule
+    FormsModule
   ],
   providers: [
     NgSelectConfig,
