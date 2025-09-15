@@ -9,8 +9,10 @@ import { Router } from "@angular/router";
 export class ApiService {
   constructor(private httpClient: HttpClient, private router: Router) { }
 
-  urlApi: string = "http://10.250.55.118/ticketbackend/public/api/";
-  urlApiAuth: string = "http://10.250.55.118/ticketbackend/public/api/";
+  /* urlApi: string = "http://10.250.55.118/ticketbackend/public/api/";
+  urlApiAuth: string = "http://10.250.55.118/ticketbackend/public/api/"; */
+  urlApi: string = "http://localhost/ticketbackend/public/api/";
+  urlApiAuth: string = "http://localhost/ticketbackend/public/api/";
   //urlApiAuth: string = "http://127.0.0.1:8000/api/";
 
   getQuery(query: string) {
