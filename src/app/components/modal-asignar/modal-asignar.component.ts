@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 export class ModalAsignarComponent implements OnInit {
   titulopant : string = "ASIGNAR TICKET ";
   tkt_id : string = '0';
+  equ_id : string = '0';
   tkt_fectkt : string = '';
   tkt_hortkt : string = '';
   tkt_numero : string = '';
@@ -44,6 +45,7 @@ export class ModalAsignarComponent implements OnInit {
     this.tkt_fectkt=this.ticket.tkt_fectkt;
     this.tkt_hortkt=this.ticket.tkt_hortkt;
     this.age_idtick=this.ticket.age_id;
+    this.equ_id=this.ticket.equ_id;
 
     //console.log(this.age_idtick);
     this.loadAgente();
@@ -55,12 +57,10 @@ export class ModalAsignarComponent implements OnInit {
 
   loadAgente() {
     const data_post = {
-      p_age_id: 0,
-      p_usu_id: 0,
-      p_age_activo: 1
+      p_equ_id: parseInt(this.equ_id)
     };
 
-    this.api.getagentesel(data_post).subscribe((data: any) => {
+    this.api.getagentetkt(data_post).subscribe((data: any) => {
       //const currentAgeId = Number(localStorage.getItem("age_id"));
       this.dataAgente = data.filter((agente: any) => agente.age_id !== parseInt(this.age_idtick) && (parseInt(this.age_idtick) > 0 || this.age_idtick !== ''));
     });

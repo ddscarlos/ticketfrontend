@@ -137,6 +137,14 @@ export class ApiService {
         })
       );
     }
+  
+  getagentetkt(data: object) {
+      return this.postQuery("ticket/agentetkt", data).pipe(
+        map((data) => {
+          return data;
+        })
+      );
+    }
   getagenteman(data: object) {
       return this.postQuery("ticket/agenteman", data).pipe(
         map((data) => {
