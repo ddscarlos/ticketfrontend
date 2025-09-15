@@ -64,6 +64,14 @@ export class ApiService {
   }
 
 //NUEVOS ENDPOINT
+  getusuariocambiocontrasena(data: object) {
+    return this.postQuery("seguridad/cambiarclave", data).pipe(
+      map((data) => {
+        return data;
+      })
+    );
+  }
+
   getDataTipodocidesel(data: object) {
     return this.postQuery("maestro/tipodocidesel", data).pipe(
       map((data) => {
@@ -119,8 +127,23 @@ export class ApiService {
       })
     );
   }
+
   getagentesel(data: object) {
       return this.postQuery("ticket/agentesel", data).pipe(
+        map((data) => {
+          return data;
+        })
+      );
+    }
+  getagenteman(data: object) {
+      return this.postQuery("ticket/agenteman", data).pipe(
+        map((data) => {
+          return data;
+        })
+      );
+    }
+  getagenteanu(data: object) {
+      return this.postQuery("ticket/agenteanu", data).pipe(
         map((data) => {
           return data;
         })
@@ -163,6 +186,13 @@ export class ApiService {
   }
   getequiposel(data: object) {
     return this.postQuery("ticket/equiposel", data).pipe(
+      map((data) => {
+        return data;
+      })
+    );
+  }
+  getequipoagentereg(data: object) {
+    return this.postQuery("ticket/equipoagentereg", data).pipe(
       map((data) => {
         return data;
       })
@@ -442,6 +472,30 @@ export class ApiService {
     );
   }
   
+  getticketsxfxa(data: object) {
+    return this.postQuery("ticket/ticketsxfxa", data).pipe(
+      map((data) => {
+        return data;
+      })
+    );
+  }
+  
+  getticketsxfae(data: object) {
+    return this.postQuery("ticket/ticketsxfae", data).pipe(
+      map((data) => {
+        return data;
+      })
+    );
+  }
+  
+  getticketsxtaf(data: object) {
+    return this.postQuery("ticket/ticketsxtaf", data).pipe(
+      map((data) => {
+        return data;
+      })
+    );
+  }
+
   getarchivosanu(data: object) {
     return this.postQuery("ticket/archivosanu", data).pipe(
       map((data) => {

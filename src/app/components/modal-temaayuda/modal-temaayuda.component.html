@@ -1,0 +1,70 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">{{titulopant}}</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="cancelar()"></button>
+</div>
+<div class="modal-body">
+  <div *ngIf="loading">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;  margin-left: 50% !important; " role="status">
+      <span class="sr-only">Cargando...</span>
+    </div>
+  </div>
+  <div class="row" *ngIf="!loading">
+    <div class="col-xl-7 col-md-12 mb-3">
+      <div>
+        <label for="tea_descri" class="form-label">DESCRIPCIÓN</label>
+        <input type="text" class="form-control form-control-sm" placeholder="INGRESE DESCRIPCIÓN" id="tea_descri" [disabled]="formDisabled" [ngModel]="tea_descri" (ngModelChange)="tea_descri = ( $event || '' ).toUpperCase()" pattern="[A-Za-zÀ-ÿ0-9\s\-,.()/#]+" />
+      </div>
+    </div>
+
+    <div class="col-xl-5 col-md-12 mb-3">
+      <div>
+        <label for="tea_abrevi" class="form-label">ABREVIACION</label>
+        <input type="text" class="form-control form-control-sm" placeholder="INGRESE DESCRIPCIÓN" id="tea_abrevi" [disabled]="formDisabled" [ngModel]="tea_abrevi" (ngModelChange)="tea_abrevi = ( $event || '' ).toUpperCase()" pattern="[A-Za-zÀ-ÿ0-9\s\-,.()/#]+" />
+      </div>
+    </div>
+
+    <div class="col-xl-12 col-md-12 mb-3">
+      <div>
+        <label for="tea_idpadr" class="form-label">TEMA DE AYUDA PADRE</label>
+        <ng-select class="mayus" [(ngModel)]="tea_idpadr" [disabled]="formDisabled">
+          <ng-option value="0">Seleccionar Tema de Ayuda</ng-option>
+          <ng-option *ngFor="let item of dataTemaAyudaPadre" [value]="item.tea_id">{{item.tea_descri}}</ng-option>
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="col-xl-12 col-md-12 mb-3">
+      <div>
+        <label for="pri_id" class="form-label">PRIORIDAD</label>
+        <ng-select class="mayus" [(ngModel)]="pri_id" [disabled]="formDisabled">
+          <ng-option value="0">Seleccionar Prioridad</ng-option>
+          <ng-option *ngFor="let item of dataPrioridad" [value]="item.pri_id">{{item.pri_descri}}</ng-option>
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="col-xl-12 col-md-12 mb-3">
+      <div>
+        <label for="equ_id" class="form-label">EQUIPO</label>
+        <ng-select class="mayus" [(ngModel)]="equ_id" [disabled]="formDisabled">
+          <ng-option value="0">Seleccionar Tema de Ayuda</ng-option>
+          <ng-option *ngFor="let item of dataEquipo" [value]="item.equ_id">{{item.equ_descri}}</ng-option>
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="col-xl-12 col-md-12 mb-3">
+      <div>
+        <label for="age_id" class="form-label">AGENTE</label>
+        <ng-select class="mayus" [(ngModel)]="age_id" [disabled]="formDisabled">
+          <ng-option value="0">Seleccionar Agente</ng-option>
+          <ng-option *ngFor="let item of dataAgente" [value]="item.age_id">{{item.usu_nomcom}}</ng-option>
+        </ng-select>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-success btn-sm" (click)="ProcesarRegistro()" *ngIf="!readOnly"><i class="bx bx-power-off"></i> {{ mode === 'create' ? 'REGISTRAR' : 'ACTUALIZAR' }}</button>
+  <button class="btn btn-danger btn-sm" (click)="cancelar()"><i class="bx bx-log-in"></i> CANCELAR</button>
+</div>

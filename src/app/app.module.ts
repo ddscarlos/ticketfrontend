@@ -40,6 +40,13 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { ModalPreviewComponent } from './components/modal-preview/modal-preview.component';
 import { FixDropdownOverflowDirectiveDirective } from './directives/fix-dropdown-overflow-directive.directive';
 import { ActionMenuComponent } from './components/action-menu/action-menu.component';
+import { TemaayudaComponent } from './pages/temaayuda/temaayuda.component';
+import { ModaltemaayudaComponent } from "./components/modal-temaayuda/modal-temaayuda.component";
+import { TicketsPorAgenteComponent } from './pages/tickets-por-agente/tickets-por-agente.component';
+import { AgentePorFechasComponent } from './pages/agente-por-fechas/agente-por-fechas.component';
+import { AgentesComponent } from './pages/agentes/agentes.component';
+import { ModalEquipoAgenteComponent } from './components/modal-equipo-agente/modal-equipo-agente.component';
+import { TicketsTemaAyudaComponent } from './pages/tickets-tema-ayuda/tickets-tema-ayuda.component';
 
 registerLocaleData(localeEs);
 
@@ -64,7 +71,14 @@ registerLocaleData(localeEs);
     ModalTrazabilidadComponent,
     ModalPreviewComponent,
     FixDropdownOverflowDirectiveDirective,
-    ActionMenuComponent
+    ActionMenuComponent,
+    TemaayudaComponent,
+    ModaltemaayudaComponent,
+    TicketsPorAgenteComponent,
+    AgentePorFechasComponent,
+    AgentesComponent,
+    ModalEquipoAgenteComponent,
+    TicketsTemaAyudaComponent
   ],
   imports: [
     BrowserModule,

@@ -99,7 +99,6 @@ export class NuevoTicketComponent implements OnInit {
     this.loadTemadeAyuda();
   }
 
-
   private withLoading<T>(obs$: Observable<T>) {
     this.startLoading();
     return obs$.pipe(finalize(() => this.stopLoading()));
@@ -353,10 +352,9 @@ export class NuevoTicketComponent implements OnInit {
       });
   }
 
-
   procesaRegistro() {
     if (this.loading) return;
-    
+
     const formData = new FormData();
     formData.append("p_tkt_id", this.tkt_id === '0' ? "0" : this.tkt_id);
     formData.append("p_tea_id", String(this.tea_id));
@@ -370,50 +368,60 @@ export class NuevoTicketComponent implements OnInit {
     formData.append("p_tkt_usutkt", String(localStorage.getItem("usuario")));
     this.files.forEach(f => formData.append("files[]", f));
 
-    swal
-      .fire({
-        title: "Mensaje",
-        html: "¿Seguro de registrar el ticket?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "ACEPTAR",
-        cancelButtonText: "CANCELAR",
-      })
-      .then((result) => {
-        if (result.isConfirmed) {
-          this.withLoading(this.api.getticketsgra(formData)).subscribe({
-            next: (data: any) => {
-              if (data[0].error == 0) {
-                swal
-                  .fire({
-                    title: "Éxito",
-                    html: data[0].mensa.trim(),
-                    icon: "success",
-                    confirmButtonColor: "#3085d6",
-                    confirmButtonText: "Aceptar",
-                  })
-                  .then(() => {
-                    this.router.navigate(["/ticket"]);
-                  });
-              } else {
-                swal.fire({
-                  title: "Error",
-                  text: data[0].mensa.trim(),
-                  icon: "error",
-                  confirmButtonColor: "#3085d6",
-                  confirmButtonText: "Aceptar",
-                });
-              }
-            },
-            error: (err) => {
-              swal.fire("Error", "No se pudo registrar el ticket", "error");
-              console.error(err);
-            },
-          });
-        }
-      });
+    swal.fire({
+      title: "Mensaje",
+      html: "¿Seguro de registrar el ticket?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "ACEPTAR",
+      cancelButtonText: "CANCELAR",
+    })
+    .then((result) => {
+      if (result.isConfirmed) {
+        let timerInterval: any;
+        swal.fire({
+          title: 'Subiendo archivos cargados',
+          html: 'Por favor espere... <b></b>',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          onBeforeOpen: () => {
+            swal.showLoading();
+          },
+          onClose: () => {
+            clearInterval(timerInterval);
+          }
+        });
+        this.api.getticketsgra(formData).subscribe({
+          next: (data: any) => {
+            swal.close();
+            if (data[0].error == 0) {
+              swal.fire({
+                title: 'Éxito',
+                html: data[0].mensa.trim() || 'Registro guardado con éxito.',
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Aceptar',
+              }).then(() => this.router.navigate(['/ticket']));
+            } else {
+              swal.fire({
+                title: 'Error',
+                text: (data[0].mensa || 'Ocurrió un problema').trim(),
+                icon: 'error',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Aceptar',
+              });
+            }
+          },
+          error: (err) => {
+            swal.close();
+            swal.fire('Error', 'No se pudo registrar el ticket', 'error');
+            console.error(err);
+          }
+        });
+      }
+    });
   }
 
   private async preloadDemoFiles() {

@@ -44,37 +44,55 @@
       <div class="card">
         <div class="card-body">
           <div class="row">
-            <div class="row g-0 text-center five-cols d-flex flex-wrap">
-                <div>
-                    <div class="p-3 border border-dashed border-start-0" style="background-color: #00a3bdd1;">
-                        <h5 class="mb-1 text-white"><span class="counter-value" [attr.data-target]="canreg">{{ canreg }}</span></h5>
-                        <p class="text-white mb-0">REGISTRADOS</p>
-                    </div>
+            <div class="row g-0 text-center d-flex flex-wrap">
+              <div class="col-6 col-md-2">
+                <div class="p-3 border border-dashed border-start-0" style="background-color: #00a3bdd1;">
+                  <h5 class="mb-1 text-white">
+                    <span class="counter-value" [attr.data-target]="canreg">{{ canreg }}</span>
+                  </h5>
+                  <p class="text-white mb-0">REGISTRADOS</p>
                 </div>
-                <div>
-                    <div class="p-3 border border-dashed border-start-0" style="background-color: #fd7e14d1;">
-                        <h5 class="mb-1 text-white"><span class="counter-value" [attr.data-target]="canena">{{ canena }}</span></h5>
-                        <p class="text-white mb-0">EN ATENCIÓN</p>
-                    </div>
+              </div>
+              <div class="col-6 col-md-2">
+                <div class="p-3 border border-dashed border-start-0" style="background-color: #fd7e14d1;">
+                  <h5 class="mb-1 text-white">
+                    <span class="counter-value" [attr.data-target]="canena">{{ canena }}</span>
+                  </h5>
+                  <p class="text-white mb-0">EN ATENCIÓN</p>
                 </div>
-                <div>
-                    <div class="p-3 border border-dashed border-start-0" style="background-color: #004987;">
-                        <h5 class="mb-1 text-white"><span class="counter-value" [attr.data-target]="canres">{{ canres }}</span></h5>
-                        <p class="text-white mb-0">RESUELTOS</p>
-                    </div>
+              </div>
+              <div class="col-6 col-md-2">
+                <div class="p-3 border border-dashed border-start-0" style="background-color: #004987;">
+                  <h5 class="mb-1 text-white">
+                    <span class="counter-value" [attr.data-target]="canres">{{ canres }}</span>
+                  </h5>
+                  <p class="text-white mb-0">RESUELTOS</p>
                 </div>
-                <div>
-                    <div class="p-3 border border-dashed border-start-0" style="background-color: #ffc107d1;">
-                        <h5 class="mb-1 text-white"><span class="counter-value" [attr.data-target]="canobs">{{ canobs }}</span></h5>
-                        <p class="text-white mb-0">OBSERVADOS</p>
-                    </div>
+              </div>
+              <div class="col-6 col-md-2">
+                <div class="p-3 border border-dashed border-start-0" style="background-color: #ffc107d1;">
+                  <h5 class="mb-1 text-white">
+                    <span class="counter-value" [attr.data-target]="canobs">{{ canobs }}</span>
+                  </h5>
+                  <p class="text-white mb-0">OBSERVADOS</p>
                 </div>
-                <div>
-                    <div class="p-3 border border-dashed border-start-0" style="background-color: #218838d1;">
-                        <h5 class="mb-1 text-white"><span class="counter-value" [attr.data-target]="canfin">{{ canfin }}</span></h5>
-                        <p class="text-white mb-0">FINALIZADOS</p>
-                    </div>
+              </div>
+              <div class="col-6 col-md-2">
+                <div class="p-3 border border-dashed border-start-0" style="background-color: #218838d1;">
+                  <h5 class="mb-1 text-white">
+                    <span class="counter-value" [attr.data-target]="canfin">{{ canfin }}</span>
+                  </h5>
+                  <p class="text-white mb-0">FINALIZADOS</p>
                 </div>
+              </div>
+              <div class="col-6 col-md-2">
+                <div class="p-3 border border-dashed border-start-0" style="background-color: #882121d1;">
+                  <h5 class="mb-1 text-white">
+                    <span class="counter-value" [attr.data-target]="cancer">{{ cancer }}</span>
+                  </h5>
+                  <p class="text-white mb-0">CERRADO</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

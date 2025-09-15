@@ -1,0 +1,37 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">{{ titulopant }}</h5>
+  <button type="button" class="btn-close" aria-label="Close" (click)="cancelar()"></button>
+</div>
+
+<div class="modal-body">
+  <div *ngIf="loading">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem; margin-left: 50% !important;" role="status">
+      <span class="sr-only">Cargando...</span>
+    </div>
+  </div>
+  <form [formGroup]="form" *ngIf="!loading">
+    <div class="row">
+      <div class="col-xl-12 col-md-12 mb-3">
+        <label class="form-label">AGENTE</label>
+        <input type="text" class="form-control form-control-sm" [value]="agente ? agente.usu_nomcom : ''" disabled />
+      </div>
+
+      <!-- EQUIPO (control reactivo) -->
+      <div class="col-xl-12 col-md-12 mb-3">
+        <label for="equ_id" class="form-label">EQUIPO</label>
+        <ng-select class="mayus" [items]="dataEquipo" bindLabel="equ_descri" bindValue="equ_id" formControlName="equ_id">
+          <ng-option [value]="null" disabled>Seleccionar Equipo</ng-option>
+        </ng-select>
+        <div class="form-text mt-1" *ngIf="agente && agente.equ_descri">
+          ACTUAL: <strong>{{ agente.equ_descri }}</strong>
+        </div>
+        <div class="invalid-feedback d-block" *ngIf="form.get('equ_id').touched && form.get('equ_id').invalid">Debes seleccionar un equipo.</div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button class="btn btn-success btn-sm" (click)="guardar()" [disabled]="formDisabled || form.invalid"> <i class="bx bx-power-off"></i> GUARDAR</button>
+  <button class="btn btn-danger btn-sm" (click)="cancelar()"> <i class="bx bx-log-in"></i> CANCELAR</button>
+</div>

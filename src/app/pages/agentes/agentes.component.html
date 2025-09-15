@@ -1,0 +1,80 @@
+<div *ngIf="loading" class="loading-overlay">
+  <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+    <span class="sr-only">Cargando...</span>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+        <h4 class="mb-sm-0">{{titulopant}}</h4>
+        <div class="page-title-right">
+          <ol class="breadcrumb m-0">
+            <li class="breadcrumb-item">
+              <a href="javascript: void(0);">Inicio</a>
+            </li>
+            <li class="breadcrumb-item active">{{titulopant}}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body" style="padding: 0px 10px 12px 12px;">
+          <div class="row" style="justify-content: end;">
+            <div class="col-xxl-3 col-md-3">
+              <div class="pt-0">
+                <div class="btn-group w-100" role="group" aria-label="Acciones">
+                  <button type="button" class="btn btn-primary btn-sm mr-2" id="Grabar" (click)="loadDataProceso()">
+                    <i class="ri-search-line me-2"></i> CONSULTAR
+                  </button>
+                  <button type="button" class="btn btn-success btn-sm" id="descargaExcel" (click)="descargaExcel()" [disabled]="!exportarHabilitado">
+                    <i class="ri-file-excel-2-line me-2"></i> EXPORTAR
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-body p-0">
+          <div class="dt-mobile-scroll" id="tablaDataProceso">
+            <table class="table align-middle table-nowrap mb-0 table--wide" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+              <thead>
+                <tr style="text-align: center;">
+                  <th scope="col">NOMBRE COMPLETO</th>
+                  <th scope="col">EQUIPO</th>
+                  <th scope="col">ESTADO</th>
+                  <th scope="col">ACCIÓN</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of dataAgente" style="text-align: center;">
+                  <td>{{item.usu_nomcom}}</td>
+                  <td>{{item.equ_descri}}</td>
+                  <td>{{item.age_estado}}</td>
+                  <td>
+                    <button *ngIf="item.age_activo == 0" class="btn btn-success btn-sm" style="padding: 0px 3px;" (click)="AnularAgente(item.age_id,item.age_activo)" title="ACTIVAR AGENTE"><i class="ri-checkbox-circle-line"></i></button>
+                    <button *ngIf="item.age_activo == 1" class="btn btn-danger btn-sm" style="padding: 0px 3px;" (click)="AnularAgente(item.age_id,item.age_activo)" title="ANULAR AGENTE"><i class="ri-close-circle-line"></i></button>
+                    <button *ngIf="item.age_activo == 1" class="btn btn-primary btn-sm ml-1" style="padding: 0px 3px;" (click)="AsignarEquipo(item.age_id,item.age_activo)" title="ASIGNAR EQUIPO"><i class="ri-team-line"></i></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #OpenModalEquipoAgente>
+  <app-modal-equipo-agente [agente]="selectedAgente" (cancelClicked)="CerrarModalProceso()"></app-modal-equipo-agente>
+</ng-template>

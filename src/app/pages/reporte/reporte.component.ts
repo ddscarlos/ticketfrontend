@@ -28,8 +28,9 @@ export class ReporteComponent implements OnInit {
   canres:number=0;
   canobs:number=0;
   canfin:number=0;
+  cancer:number=0;
 
-  // 📊 HIGHCHARTS
+  // HIGHCHARTS
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options;
   Highcharts2: typeof Highcharts = Highcharts;
@@ -75,6 +76,7 @@ export class ReporteComponent implements OnInit {
       this.canres = parseInt(this.dataDashboard.canres);
       this.canobs = parseInt(this.dataDashboard.canobs);
       this.canfin = parseInt(this.dataDashboard.canfin);
+      this.cancer = parseInt(this.dataDashboard.cancer);
 
       if (this.dataDashboard && this.dataDashboard.jsnfec) {
         const parsedData = JSON.parse(this.dataDashboard.jsnfec);
