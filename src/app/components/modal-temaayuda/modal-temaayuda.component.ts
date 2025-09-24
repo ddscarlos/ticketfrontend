@@ -83,6 +83,10 @@ export class ModaltemaayudaComponent implements OnInit {
   }
 
   get formDisabled(): boolean {
+    return this.loading || this.readOnly || this.mode === 'edit';
+  }
+
+  get formDisabledPriAge(): boolean {
     return this.loading || this.readOnly;
   }
 

@@ -36,7 +36,7 @@
     <div class="col-xl-12 col-md-12 mb-3">
       <div>
         <label for="pri_id" class="form-label">PRIORIDAD</label>
-        <ng-select class="mayus" [(ngModel)]="pri_id" [disabled]="formDisabled">
+        <ng-select class="mayus" [(ngModel)]="pri_id" [disabled]="formDisabledPriAge">
           <ng-option value="0">Seleccionar Prioridad</ng-option>
           <ng-option *ngFor="let item of dataPrioridad" [value]="item.pri_id">{{item.pri_descri}}</ng-option>
         </ng-select>
@@ -56,7 +56,7 @@
     <div class="col-xl-12 col-md-12 mb-3">
       <div>
         <label for="age_id" class="form-label">AGENTE</label>
-        <ng-select class="mayus" [(ngModel)]="age_id" [disabled]="formDisabled">
+        <ng-select class="mayus" [(ngModel)]="age_id" [disabled]="formDisabledPriAge">
           <ng-option value="0">Seleccionar Agente</ng-option>
           <ng-option *ngFor="let item of dataAgente" [value]="item.age_id">{{item.usu_nomcom}}</ng-option>
         </ng-select>

@@ -76,7 +76,7 @@ export class LoginComponent implements OnInit {
             localStorage.setItem('usu_apemat', datos[0].usu_apemat);
             localStorage.setItem('usu_nombre', datos[0].usu_nombre);
             localStorage.setItem('usu_nomcom', datos[0].usu_nomcom);
-            localStorage.setItem('equ_id', datos[0].equ_id);
+            //localStorage.setItem('equ_id', datos[0].equ_id);
             localStorage.setItem('usu_correo', datos[0].usu_correo);
             localStorage.setItem('usu_chkadm', datos[0].usu_chkadm);
             localStorage.setItem('age_chkall', datos[0].age_chkall);

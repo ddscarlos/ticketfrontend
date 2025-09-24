@@ -77,6 +77,7 @@ export class TicketComponent implements OnInit {
   @ViewChild('OpenModalResponderTicket', { static: false }) OpenModalResponderTicket!: TemplateRef<any>;
   @ViewChild('OpenModalCerrarTicket', { static: false }) OpenModalCerrarTicket!: TemplateRef<any>;
   @ViewChild('OpenModalTrazabilidadTicket', { static: false }) OpenModalTrazabilidadTicket!: TemplateRef<any>;
+  @ViewChild('OpenModalDerivarTicket', { static: false }) OpenModalDerivarTicket!: TemplateRef<any>;
 
   @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
@@ -346,6 +347,7 @@ export class TicketComponent implements OnInit {
     console.log('Ruta actual:', this.ruta);
 
     const match = this.ObjetoMenu.find(item => item.obj_enlace === this.ruta);
+    console.log('Objeto de menú coincidente:', match);
     if (match) {
       this.objid = match.obj_id;
       this.jsn_permis = match.jsn_permis;
@@ -500,6 +502,9 @@ export class TicketComponent implements OnInit {
         break;
       case 11:
         this.modalRef = this.modalService.show(this.OpenModalTrazabilidadTicket);
+        break;
+      case 12:
+        this.modalRef = this.modalService.show(this.OpenModalDerivarTicket);
         break;
       default:
         console.warn('Botón no reconocido:', bot_id);

@@ -460,6 +460,13 @@ export class ApiService {
       })
     );
   }
+  getticketsder(data: object) {
+    return this.postQuery("ticket/ticketsder", data).pipe(
+      map((data) => {
+        return data;
+      })
+    );
+  }
   getticketlis(data: object) {
     return this.postQuery("ticket/ticketslis", data).pipe(
       map((data) => {

@@ -47,6 +47,7 @@ import { AgentePorFechasComponent } from './pages/agente-por-fechas/agente-por-f
 import { AgentesComponent } from './pages/agentes/agentes.component';
 import { ModalEquipoAgenteComponent } from './components/modal-equipo-agente/modal-equipo-agente.component';
 import { TicketsTemaAyudaComponent } from './pages/tickets-tema-ayuda/tickets-tema-ayuda.component';
+import { ModalDerivarComponent } from './components/modal-derivar/modal-derivar.component';
 
 registerLocaleData(localeEs);
 
@@ -78,7 +79,8 @@ registerLocaleData(localeEs);
     AgentePorFechasComponent,
     AgentesComponent,
     ModalEquipoAgenteComponent,
-    TicketsTemaAyudaComponent
+    TicketsTemaAyudaComponent,
+    ModalDerivarComponent
   ],
   imports: [
     BrowserModule,

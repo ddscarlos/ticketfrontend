@@ -107,6 +107,7 @@
                   <th scope="col" data-priority="1">ESTADO</th>
                   <th scope="col" data-priority="6">FECHA DE CREACIÓN</th>
                   <th scope="col" data-priority="6">FECHA ULTIMO MOV.</th>
+                  <th scope="col" data-priority="6">PADRE</th>
                   <th scope="col" data-priority="1">ACCIONES</th>
                 </tr>
               </thead>
@@ -122,6 +123,7 @@
                   <td><span class="badge text-white" [ngStyle]="{'background-color': item.est_colors}">{{item.est_descri}}</span></td>
                   <td>{{item.tkt_fectkt}} {{item.tkt_hortkt}}</td>
                   <td>{{item.tkt_fecumo}}</td>
+                  <td>{{item.tkt_idpadr}}</td>
                   <td>
                     <div class="dropdown">
                       <button type="button" class="btn btn-outline-primary btn-icon btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-align-justify"></i></button>
@@ -134,6 +136,7 @@
                           <li *ngIf="item.chk_botres"><a class="dropdown-item edit-item-btn" (click)="getIdButton(8, item)">RESPONDER</a></li>
                           <li *ngIf="item.chk_botval"><a class="dropdown-item edit-item-btn" (click)="getIdButton(9, item)">VALIDAR</a></li>
                           <li *ngIf="item.chk_botcer"><a class="dropdown-item edit-item-btn" (click)="getIdButton(10, item)">CERRAR</a></li>
+                          <li *ngIf="item.chk_botder"><a class="dropdown-item edit-item-btn" (click)="getIdButton(12, item)">DERIVAR</a></li>
                           <li *ngIf="item.chk_bottrz"><a class="dropdown-item edit-item-btn" (click)="getIdButton(11, item)">TRAZABILIDAD</a></li>
                         </ul>
                     </div>
@@ -171,4 +174,7 @@
 </ng-template>
 <ng-template #OpenModalTrazabilidadTicket>
   <app-modal-trazabilidad [ticket]="selectedTicket" (cancelClicked)="CerrarModalProceso()"></app-modal-trazabilidad>
+</ng-template>
+<ng-template #OpenModalDerivarTicket>
+  <app-modal-derivar [ticket]="selectedTicket" (cancelClicked)="CerrarModalProceso()"></app-modal-derivar>
 </ng-template>
