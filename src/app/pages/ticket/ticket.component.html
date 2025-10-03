@@ -107,7 +107,7 @@
                   <th scope="col" data-priority="1">ESTADO</th>
                   <th scope="col" data-priority="6">FECHA DE CREACIÓN</th>
                   <th scope="col" data-priority="6">FECHA ULTIMO MOV.</th>
-                  <th scope="col" data-priority="6">PADRE</th>
+                  <th scope="col" data-priority="6">VINCULO T(#)</th>
                   <th scope="col" data-priority="1">ACCIONES</th>
                 </tr>
               </thead>
@@ -123,7 +123,7 @@
                   <td><span class="badge text-white" [ngStyle]="{'background-color': item.est_colors}">{{item.est_descri}}</span></td>
                   <td>{{item.tkt_fectkt}} {{item.tkt_hortkt}}</td>
                   <td>{{item.tkt_fecumo}}</td>
-                  <td>{{item.tkt_idpadr}}</td>
+                  <td><b><span *ngIf="item.tkp_numero">#</span>{{item.tkp_numero}}</b></td>
                   <td>
                     <div class="dropdown">
                       <button type="button" class="btn btn-outline-primary btn-icon btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-align-justify"></i></button>

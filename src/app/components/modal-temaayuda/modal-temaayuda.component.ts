@@ -185,5 +185,5 @@ export class ModaltemaayudaComponent implements OnInit {
           });
         }
       })
-    }
+  }
 }

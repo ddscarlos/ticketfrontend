@@ -176,7 +176,7 @@ export class AgentePorFechasComponent implements OnInit {
 
     loadAgente() {
       const data_post = { p_age_id: 0, p_usu_id: 0, p_age_activo: 1 };
-      this.api.getagentesel(data_post).subscribe((data: any) => {
+      this.api.getagenteman(data_post).subscribe((data: any) => {
         this.dataAgente = data;
       });
     }

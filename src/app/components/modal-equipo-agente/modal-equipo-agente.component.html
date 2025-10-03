@@ -4,31 +4,72 @@
 </div>
 
 <div class="modal-body">
+  <!-- Spinner -->
   <div *ngIf="loading">
     <div class="spinner-border text-primary" style="width: 3rem; height: 3rem; margin-left: 50% !important;" role="status">
       <span class="sr-only">Cargando...</span>
     </div>
   </div>
-  <form [formGroup]="form" *ngIf="!loading">
-    <div class="row">
-      <div class="col-xl-12 col-md-12 mb-3">
-        <label class="form-label">AGENTE</label>
-        <input type="text" class="form-control form-control-sm" [value]="agente ? agente.usu_nomcom : ''" disabled />
-      </div>
 
-      <!-- EQUIPO (control reactivo) -->
-      <div class="col-xl-12 col-md-12 mb-3">
-        <label for="equ_id" class="form-label">EQUIPO</label>
-        <ng-select class="mayus" [items]="dataEquipo" bindLabel="equ_descri" bindValue="equ_id" formControlName="equ_id">
-          <ng-option [value]="null" disabled>Seleccionar Equipo</ng-option>
-        </ng-select>
-        <div class="form-text mt-1" *ngIf="agente && agente.equ_descri">
-          ACTUAL: <strong>{{ agente.equ_descri }}</strong>
+  <!-- Contenido -->
+  <div class="row" *ngIf="!loading">
+    <!-- IZQUIERDA: Form (col-6) -->
+    <div class="col-12 col-md-5">
+      <form [formGroup]="form">
+        <div class="mb-3">
+          <label class="form-label">AGENTE</label>
+          <input type="text" class="form-control form-control-sm" [value]="agente ? agente.usu_nomcom : ''" disabled />
         </div>
-        <div class="invalid-feedback d-block" *ngIf="form.get('equ_id').touched && form.get('equ_id').invalid">Debes seleccionar un equipo.</div>
+
+        <div class="mb-3">
+          <label for="equ_id" class="form-label">EQUIPO</label>
+          <ng-select class="mayus" [items]="dataEquipo" bindLabel="equ_descri" bindValue="equ_id" formControlName="equ_id" placeholder="Seleccionar Equipo" [clearable]="false">
+            <ng-option [value]="null" [disabled]="true">Seleccionar Equipo</ng-option>
+          </ng-select>
+          <div class="invalid-feedback d-block"
+               *ngIf="form.get('equ_id').touched && form.get('equ_id').invalid">
+            Debes seleccionar un equipo.
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- DERECHA: Tabla (col-6) -->
+    <div class="col-12 col-md-7">
+      <div class="card h-100">
+        <div class="card-body p-2">
+          <div class="table-responsive">
+            <table class="table table-sm mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th class="text-center" style="width: 70%;">EQUIPO</th>
+                  <th class="text-center" style="width: 30%;">ACCIONES</th>
+                </tr>
+              </thead>
+
+              <tbody *ngIf="equiposAgente && equiposAgente.length; else sinEquipos">
+                <tr *ngFor="let eq of equiposAgente">
+                  <td class="text-center">{{ eq.equ_descri }}</td>
+                  <td class="text-center"><button class="btn btn-danger btn-sm" style="padding: 0px 3px;" (click)="AnularEquipoAgente(eq.eag_id)" title="ANULAR EQUIPO - AGENTE"><i class="bx bx-trash"></i></button></td>
+                  <!-- <td class="text-center">{{ eq.equ_id }}</td> -->
+                </tr>
+              </tbody>
+            </table>
+
+            <ng-template #sinEquipos>
+              <table class="table table-sm mb-0">
+                <tbody>
+                  <tr>
+                    <td class="text-center text-muted" colspan="2">Sin equipos asignados</td>
+                  </tr>
+                </tbody>
+              </table>
+            </ng-template>
+          </div>
+        </div>
       </div>
     </div>
-  </form>
+  </div>
 </div>
 
 <div class="modal-footer">

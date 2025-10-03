@@ -10,7 +10,7 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class ModalEquipoAgenteComponent implements OnInit {
 
-  @Input() agente: any; // { age_id, usu_nomcom, equ_id?, equ_descri? }
+  @Input() agente: any;
   @Output() cancelClicked = new EventEmitter<void>();
   @Output() saved = new EventEmitter<any>();
 
@@ -20,6 +20,7 @@ export class ModalEquipoAgenteComponent implements OnInit {
   guardando: boolean = false;
 
   dataEquipo: Array<{ equ_id: number; equ_descri: string }> = [];
+  equiposAgente: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -34,6 +35,20 @@ export class ModalEquipoAgenteComponent implements OnInit {
     this.loadEquipo();
     if (this.agente && this.agente.equ_id) {
       this.form.patchValue({ equ_id: Number(this.agente.equ_id) });
+    }
+    this.equiposAgente = this.parseEquipos(this.agente && this.agente.equ_descri);
+  }
+
+  ngOnChanges() {
+    this.equiposAgente = this.parseEquipos(this.agente && this.agente.equ_descri);
+  }
+
+  private parseEquipos(equ_descri: any): any[] {
+    try {
+      var arr = typeof equ_descri === 'string' ? JSON.parse(equ_descri) : equ_descri;
+      return Array.isArray(arr) ? arr : [];
+    } catch (e) {
+      return [];
     }
   }
 
@@ -101,4 +116,49 @@ export class ModalEquipoAgenteComponent implements OnInit {
       complete: () => { this.guardando = false; }
     });
   }
+
+   AnularEquipoAgente(eag_id: number){
+      const dataPost = {
+        p_eag_id:eag_id
+      };
+  
+      swal.fire({
+        title: 'Mensaje',
+        html: "¿Seguro de Anular?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ACEPTAR',
+        cancelButtonText: 'CANCELAR'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.api.getequipoagenteanu(dataPost).subscribe((data: any) => {
+            if(data[0].error == 0){
+              swal.fire({
+                title: 'Exito',
+                html: data[0].mensa.trim(),
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Aceptar',
+              }).then((result) => {
+                if (result.value) {
+                  setTimeout(() => {
+                    this.ngOnInit();
+                  }, 300);
+                }
+              });
+            }else{
+              swal.fire({
+                  title: 'Error',
+                  text: data[0].mensa.trim(),
+                  icon: 'error',
+                  confirmButtonColor: '#3085d6',
+                  confirmButtonText: 'Aceptar',
+                });
+            }
+          });
+        }
+      })
+    }
 }

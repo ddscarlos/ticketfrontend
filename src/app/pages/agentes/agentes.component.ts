@@ -170,7 +170,11 @@ export class AgentesComponent implements OnInit {
    }
 
     loadAgente() {
-      const data_post = { p_age_id: 0, p_usu_id: 0, p_age_activo: 1 };
+      const data_post = { 
+        p_age_id: 0,
+        p_usu_id: 0,
+        p_age_activo: 1
+      };
       this.api.getagentesel(data_post).subscribe((data: any) => {
         this.dataAgente = data;
       });
@@ -192,6 +196,7 @@ export class AgentesComponent implements OnInit {
         p_usu_apepat:'',
         p_usu_apemat:'',
         p_usu_nombre:'',
+        p_jsn_permis: this.jsn_permis,
         p_age_activo:9
       };
   

@@ -360,7 +360,7 @@ export class TemaayudaComponent implements OnInit {
         p_age_activo: 1
       };
 
-      this.api.getagentesel(data_post).subscribe((data: any) => {
+      this.api.getagenteman(data_post).subscribe((data: any) => {
         this.dataAgente = data;
       });
     }

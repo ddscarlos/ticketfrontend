@@ -14,12 +14,15 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ): boolean | UrlTree {
     const token = localStorage.getItem('token');
+    const usuario = localStorage.getItem('usuario');
+    const objetosMenu = localStorage.getItem('objetosMenu');
 
-    if (token) {
+    if (token && usuario) {
       return true;
     } else {
       console.warn('Bloqueado por AuthGuard: no hay token');
       return this.router.createUrlTree(['/login']);
     }
+    
   }
 }

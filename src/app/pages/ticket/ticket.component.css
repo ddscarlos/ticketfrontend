@@ -107,4 +107,7 @@ table.dataTable th, table.dataTable td {
   overflow: visible;
 }
 
-
+i.ri-check-line.text-success.fw-bold {
+    font-size: 15px;
+    font-weight: 900 !important;
+}

@@ -58,7 +58,7 @@
               <tbody>
                 <tr *ngFor="let item of dataAgente" style="text-align: center;">
                   <td>{{item.usu_nomcom}}</td>
-                  <td>{{item.equ_descri}}</td>
+                  <td>{{item.equ_destxt}}</td>
                   <td>{{item.age_estado}}</td>
                   <td>
                     <button *ngIf="item.age_activo == 0" class="btn btn-success btn-sm" style="padding: 0px 3px;" (click)="AnularAgente(item.age_id,item.age_activo)" title="ACTIVAR AGENTE"><i class="ri-checkbox-circle-line"></i></button>

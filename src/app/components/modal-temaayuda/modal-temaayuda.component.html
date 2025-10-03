@@ -12,14 +12,14 @@
     <div class="col-xl-7 col-md-12 mb-3">
       <div>
         <label for="tea_descri" class="form-label">DESCRIPCIÓN</label>
-        <input type="text" class="form-control form-control-sm" placeholder="INGRESE DESCRIPCIÓN" id="tea_descri" [disabled]="formDisabled" [ngModel]="tea_descri" (ngModelChange)="tea_descri = ( $event || '' ).toUpperCase()" pattern="[A-Za-zÀ-ÿ0-9\s\-,.()/#]+" />
+        <input type="text" class="form-control form-control-sm" maxlength="200" placeholder="INGRESE DESCRIPCIÓN" id="tea_descri" [disabled]="formDisabled" [ngModel]="tea_descri" (ngModelChange)="tea_descri = ( $event || '' ).toUpperCase()" pattern="[A-Za-zÀ-ÿ0-9\s\-,.()/#]+" />
       </div>
     </div>
 
     <div class="col-xl-5 col-md-12 mb-3">
       <div>
         <label for="tea_abrevi" class="form-label">ABREVIACION</label>
-        <input type="text" class="form-control form-control-sm" placeholder="INGRESE DESCRIPCIÓN" id="tea_abrevi" [disabled]="formDisabled" [ngModel]="tea_abrevi" (ngModelChange)="tea_abrevi = ( $event || '' ).toUpperCase()" pattern="[A-Za-zÀ-ÿ0-9\s\-,.()/#]+" />
+        <input type="text" class="form-control form-control-sm" maxlength="10" placeholder="INGRESE DESCRIPCIÓN" id="tea_abrevi" [disabled]="formDisabled" [ngModel]="tea_abrevi" (ngModelChange)="tea_abrevi = ( $event || '' ).toUpperCase()" pattern="[A-Za-zÀ-ÿ0-9\s\-,.()/#]+" />
       </div>
     </div>
 
