@@ -97,11 +97,9 @@ export class TicketComponent implements OnInit {
     select: true,
     autoWidth: false,
     searching: true,
+    order: [[6, 'desc']], // 👈 Ordenar por FECHA DE CREACIÓN descendente
     responsive: {
-      details: {
-        type: 'inline',
-        target: 'tr'
-      },
+      details: { type: 'inline', target: 'tr' },
       breakpoints: [
         { name: 'xl', width: Infinity },
         { name: 'lg', width: 1400 },
@@ -111,16 +109,14 @@ export class TicketComponent implements OnInit {
       ]
     },
     columnDefs: [
-      { targets: [0,1,3], responsivePriority: 3 }, // Nº, Solicitado, Agente
-      { targets: 2,  responsivePriority: 2, className: 'dt-col-asunto' }, // ASUNTO (puede ocultarse después)
-      { targets: [4,5], responsivePriority: 1 }, // PRIORIDAD / ESTADO
-      { targets: [6,7], responsivePriority: 4 },  // Fechas (se ocultan primero)
-      { targets: 8,  responsivePriority: 1 } // ACCIONES
+      { targets: [0, 1, 3], responsivePriority: 3 },
+      { targets: 2, responsivePriority: 2, className: 'dt-col-asunto' },
+      { targets: [4, 5], responsivePriority: 1 },
+      { targets: [6, 7], responsivePriority: 4 },
+      { targets: 8, responsivePriority: 1 }
     ],
     rowCallback: (row: Node, data: any[] | Object, index: number) => {
-      const self = this;
-      $("td", row).off("click");
-      $("td", row).on("click", () => {
+      $("td", row).off("click").on("click", () => {
         this.rowSelected = data;
         if (this.rowSelected !== this.dataanteriorseleccionada) {
           this.dataanteriorseleccionada = this.rowSelected;
@@ -129,9 +125,7 @@ export class TicketComponent implements OnInit {
         }
 
         const anular = document.getElementById('anular') as HTMLButtonElement | null;
-        if (anular) {
-          anular.disabled = false;
-        }
+        if (anular) anular.disabled = false;
       });
       return row;
     },
@@ -159,8 +153,8 @@ export class TicketComponent implements OnInit {
         last: "Último",
       },
       aria: {
-        sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-        sortDescending: ": Activar para ordenar la tabla en orden descendente",
+        sortAscending: ": Activar para ordenar ascendente",
+        sortDescending: ": Activar para ordenar descendente",
       },
     },
   };
@@ -196,6 +190,7 @@ export class TicketComponent implements OnInit {
       select: true,
       autoWidth: false,
       searching: true,
+      order: [[6, 'desc']],
       responsive: onMobile ? false : {
         details: { type: 'inline', target: 'tr' },
         breakpoints: [

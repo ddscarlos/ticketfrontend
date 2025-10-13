@@ -19,6 +19,7 @@
                         <p class="text-uppercase fw-medium text-muted text-truncate fs-13 mb-0"><b>HORA :</b> {{ ticket?.tkt_hortkt}}</p>
                     </div>
                 </div>
+                <p *ngIf="ticket?.age_id > 0" class="text-uppercase fw-medium text-muted text-truncate fs-13 mb-0 pt-2"><b>ASIGNADO A :</b> {{ ticket?.age_nomcom ? (ticket?.age_nomcom | slice:0:45) + (ticket?.age_nomcom.length > 45 ? '...' : '') : '-' }}</p>
             </div>
         </div>
     </div>
