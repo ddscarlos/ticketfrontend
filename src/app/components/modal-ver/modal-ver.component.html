@@ -46,12 +46,14 @@
                         <thead class="table-active">
                             <tr>
                                 <th scope="col">ARCHIVO</th>
+                                <th scope="col" style="width: 100px; text-align: center;">TAMAÑO</th>
                                 <th scope="col" style="text-align: center;">ACCION</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let datoFile of dataArchivos">
                                 <td>{{datoFile.arc_nombre}}</td>
+                                <td class="text-center">{{ getFileSize(datoFile.arc_tamfil) }}</td>
                                 <td class="text-center">
                                     <span class="badge badge-pill badge-outline-primary"  data-key="t-custom" (click)="verArchivo(datoFile)" style="cursor: pointer;">
                                         <i class="ri-eye-line"></i>

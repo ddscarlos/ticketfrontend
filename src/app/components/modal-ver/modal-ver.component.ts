@@ -63,6 +63,18 @@ export class ModalVerComponent implements OnInit {
     });
   }
 
+  getFileSize(bytes: number): string {
+    if (!bytes || bytes <= 0) return '';
+    const units = ['B', 'KB', 'MB', 'GB'];
+    let i = 0;
+    let val = bytes;
+    while (val >= 1024 && i < units.length - 1) {
+      val /= 1024;
+      i++;
+    }
+    return `${val.toFixed(1)} ${units[i]}`;
+  }
+
   verArchivo(item: any) {
     const rutaRelativa = item.rut_archiv.replace(/\\\\/g, '\\').replace(/\\/g, '/'); 
     const data_post = {

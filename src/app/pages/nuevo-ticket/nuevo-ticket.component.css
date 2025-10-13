@@ -76,3 +76,7 @@ tr {
 ngx-dropzone-preview {
     cursor: pointer;
 }
+
+span.required {
+    color: #ff0000;
+}

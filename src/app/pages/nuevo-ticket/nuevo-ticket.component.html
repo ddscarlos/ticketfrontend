@@ -27,13 +27,13 @@
           <div class="row">
             <div class="col-xxl-6 col-md-6">
               <div>
-                <label for="tkt_asunto" class="form-label">ASUNTO</label>
+                <label for="tkt_asunto" class="form-label">ASUNTO <span class="required">*</span></label>
                 <input type="text" class="form-control form-control-sm" placeholder="INGRESE ASUNTO DEL TICKET" id="tkt_asunto" [ngModel]="tkt_asunto" (ngModelChange)="tkt_asunto = ( $event || '' ).toUpperCase()" pattern="[A-Za-zÀ-ÿ0-9\s\-,.()/#]+"/>
               </div>
             </div>
             <div class="col-xxl-6 col-md-6">
               <div>
-                <label for="tea_id" class="form-label">TEMA DE AYUDA</label>
+                <label for="tea_id" class="form-label">TEMA DE AYUDA <span class="required">*</span></label>
                 <ng-select class="mayus" [(ngModel)]="tea_id" [disabled]="blockinpt">
                     <ng-option value="0">Seleccionar Tema de Ayuda</ng-option>
                     <ng-option *ngFor="let item of dataTemaAyuda" [value]="item.tea_id">{{item.tea_descri}}</ng-option>
@@ -44,7 +44,7 @@
           <div class="row">
             <div class="col-xxl-6 col-md-6">
               <div>
-                <label for="ori_id" class="form-label">ORIGEN</label>
+                <label for="ori_id" class="form-label">ORIGEN <span class="required">*</span></label>
                 <ng-select class="mayus" [(ngModel)]="ori_id" [disabled]="blockinpt">
                     <ng-option value="0">Seleccionar Origen</ng-option>
                     <ng-option *ngFor="let item of dataOrigen" [value]="item.ori_id">{{item.ori_descri}}</ng-option>
@@ -53,10 +53,10 @@
             </div>
             <div class="col-xxl-6 col-md-6">
               <div>
-                <label for="tkt_numcel" class="form-label">NÚMERO DE CELULAR</label>
+                <label for="tkt_numcel" class="form-label">NÚMERO DE CELULAR <span class="required">*</span></label>
                 <div class="input-group input-group-sm">
                     <span class="input-group-text" id="tkt_numcel"><i class="ri-phone-fill"></i></span>
-                    <input type="text" class="form-control" placeholder="987-654-321" id="tkt_numcel" [(ngModel)]="tkt_numcel" (keypress)="restrictNumeric($event)">
+                    <input type="text" class="form-control" placeholder="987-654-321" id="tkt_numcel" [(ngModel)]="tkt_numcel" maxlength="11" (input)="onInputCelular($event)">
                 </div>
               </div>
             </div>
@@ -64,7 +64,7 @@
           <div class="row" *ngIf="ShowColmUsuario">
             <div class="col-xxl-12 col-md-12">
               <div>
-                <label for="tkt_usutkt" class="form-label">USUARIO SOLICITANTE</label>
+                <label for="tkt_usutkt" class="form-label">USUARIO SOLICITANTE <span class="required">*</span></label>
                 <ng-select class="mayus" [(ngModel)]="tkt_usutkt" [disabled]="blockinpt || disususoli">
                     <ng-option value="0">Seleccionar Usuario Solicitante</ng-option>
                     <ng-option *ngFor="let item of dataUsuarios" [value]="item.usu_id">{{item.usu_nomcom}}</ng-option>
@@ -83,7 +83,7 @@
           <div class="row">
             <div class="col-xxl-12 col-md-6">
               <div>
-                <label class="form-label"><strong>Adjuntar Archivos </strong> | <i> Puede adjuntar hasta 5 archivos (máximo 2 MB cada uno). Formatos permitidos: PDF, JPG, JPEG y PNG.</i></label>
+                <label class="form-label"><strong>Adjuntar Archivos </strong> | <i> Puede adjuntar hasta 5 archivos (máximo 5 MB cada uno). Formatos permitidos: PDF, JPG, JPEG y PNG.</i></label>
                 <ngx-dropzone
                   [disableClick]="true"
                   (change)="onSelect($event)"
@@ -115,6 +115,7 @@
                           </ng-template>
                           <div class="dz-text">
                             <div class="dz-name">{{ f.name }}</div>
+                            <div class="dz-meta">{{ getFileSize(f) }}</div>
                             <div class="dz-meta">Existente</div>
                           </div>
                         </div>
@@ -164,9 +165,11 @@
                             <i class="ri-file-pdf-line dz-icon" *ngIf="f.type==='application/pdf'"></i>
                             <i class="ri-file-2-line dz-icon" *ngIf="f.type!=='application/pdf'"></i>
                           </ng-template>
+                        
                           <div class="dz-text">
                             <div class="dz-name">{{ f.name }}</div>
                             <div class="dz-meta">{{ f.type || 'archivo' }}</div>
+                            <div class="dz-meta">{{ getFileSize(f) }}</div>
                             <div class="dz-meta">Añadido</div>
                           </div>
                         </div>

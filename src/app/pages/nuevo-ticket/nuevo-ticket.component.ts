@@ -13,8 +13,9 @@ import { Observable } from 'rxjs';
 type ExistingFile = {
   arc_id: number;
   name: string;
-  type: string;      // mime por extensión
-  path: string;      // rut_archiv de tu JSON
+  type: string;
+  path: string;
+  size?: number;      // ✅ tamaño en bytes (opcional)
   isRemote: true;
 };
 
@@ -46,6 +47,7 @@ export class NuevoTicketComponent implements OnInit {
   dataTemaAyuda:any;
   dataUsuarios:any;
   dataOrigen:any;
+  pendingDeletes: ExistingFile[] = [];
 
   tkt_id : string = '0';
   tea_id : string = '0';
@@ -127,6 +129,7 @@ export class NuevoTicketComponent implements OnInit {
             name  : a.arc_nombre,
             type  : this.mimeFromExt(a.arc_nombre),
             path  : (a.rut_archiv || ''),
+            size  : a.arc_tamfil || 0,
             isRemote: true as boolean,
           }));
         } catch { this.existingFiles = []; }
@@ -188,7 +191,6 @@ export class NuevoTicketComponent implements OnInit {
       error: (err) => console.error('Error base64-from-path:', err)
     });
   }
-
 
   verArchivoNew(file: File) {
     var reader = new FileReader();
@@ -283,7 +285,7 @@ export class NuevoTicketComponent implements OnInit {
         continue;
       }
       if (file.size > maxBytes) {
-        rechazados.push(`${file.name} (máx. 2MB)`);
+        rechazados.push(`${file.name} (máx. 5MB)`);
         continue;
       }
       const exists = this.files.some(f => f.name===file.name && f.size===file.size && f.type===file.type);
@@ -307,53 +309,74 @@ export class NuevoTicketComponent implements OnInit {
   }
 
   async onRemoveExisting(f: ExistingFile) {
-    if (this.loading) return;
-
+    // No eliminamos del servidor todavía, solo marcamos
     const isConfirmed = await swal.fire({
-      title: '¿Eliminar archivo?',
-      text: f.name,
+      title: '¿Quitar archivo?',
+      text: `${f.name} (Se eliminará al guardar los cambios)`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Sí, eliminar',
+      confirmButtonText: 'Sí, quitar',
       cancelButtonText: 'Cancelar'
     }).then(r => r.isConfirmed);
 
     if (!isConfirmed) return;
 
-    const payload = {
-      p_arc_id: f.arc_id,
-      p_arc_usumov: Number(localStorage.getItem('usuario') || 0)
-    };
+    // Lo quitamos visualmente de la lista
+    this.existingFiles = this.existingFiles.filter(x => x.arc_id !== f.arc_id);
 
-    const arcId = f.arc_id;
+    // Lo agregamos al array de pendientes
+    this.pendingDeletes.push(f);
 
-    this.startLoading();
-    this.api.getarchivosanu(payload)
-      .pipe(finalize(() => this.stopLoading()))
-      .subscribe({
-        next: (res: any) => {
-          const result = Array.isArray(res) ? res[0] : res;
-          const ok = result && (result.error === 0 || typeof result.error === 'undefined');
+    swal.fire('Marcado para eliminar', `${f.name} será eliminado al guardar.`, 'info');
+  }
 
-          // asegura el mensaje, si existe
-          const mensaje = result && result.mensa ? String(result.mensa).trim() : '';
+  getFileSize(file: File | { size?: number }): string {
+    const size = file.size || 0;
+    if (size === 0) return '';
+    const units = ['B', 'KB', 'MB', 'GB'];
+    let i = 0;
+    let val = size;
+    while (val >= 1024 && i < units.length - 1) {
+      val /= 1024;
+      i++;
+    }
+    return `${val.toFixed(1)} ${units[i]}`;
+  }
 
-          if (ok) {
-            this.existingFiles = this.existingFiles.filter(x => x.arc_id !== arcId);
-            swal.fire('Eliminado', mensaje || 'Archivo eliminado', 'success');
-          } else {
-            swal.fire('Advertencia', mensaje || 'No se pudo eliminar', 'warning');
-          }
-        },
-        error: (err) => {
-          console.error('Error al eliminar archivo:', err);
-          swal.fire('Error', 'No se pudo eliminar', 'error');
+  private async eliminarPendientes() {
+    if (!this.pendingDeletes.length) return;
+
+    for (const f of this.pendingDeletes) {
+      const payload = {
+        p_arc_id: f.arc_id,
+        p_arc_usumov: Number(localStorage.getItem('usuario') || 0)
+      };
+
+      try {
+        const res: any = await this.api.getarchivosanu(payload).toPromise();
+        const result = Array.isArray(res) ? res[0] : res;
+        if (result && result.error === 0) {
+          console.log(`✅ Archivo eliminado: ${f.name}`);
+        } else {
+          console.warn(`⚠️ No se pudo eliminar ${f.name}`, (result && result.mensa) ? result.mensa : '');
         }
-      });
+      } catch (err) {
+        console.error(`❌ Error al eliminar ${f.name}`, err);
+      }
+    }
+
+    // Limpia la lista de pendientes
+    this.pendingDeletes = [];
   }
 
   procesaRegistro() {
     if (this.loading) return;
+    let numCel = (this.tkt_numcel || '').replace(/\D/g, '');
+    
+    if (numCel.length < 7 || numCel.length > 11) {
+      swal.fire('Número inválido', 'Ingrese un número de celular válido (7 a 11 dígitos).', 'warning');
+      return;
+    }
 
     const formData = new FormData();
     formData.append("p_tkt_id", this.tkt_id === '0' ? "0" : this.tkt_id);
@@ -364,7 +387,7 @@ export class NuevoTicketComponent implements OnInit {
     formData.append("p_tkp_numero", "");
     formData.append("p_tkt_asunto", this.tkt_asunto);
     formData.append("p_tkt_observ", (this.tkt_observ || '').toUpperCase());
-    formData.append("p_tkt_numcel", this.tkt_numcel || "");
+    formData.append("p_tkt_numcel", numCel);
     formData.append("p_tkt_usutkt", String(localStorage.getItem("usuario")));
     this.files.forEach(f => formData.append("files[]", f));
 
@@ -397,9 +420,10 @@ export class NuevoTicketComponent implements OnInit {
           next: (data: any) => {
             swal.close();
             if (data[0].error == 0) {
+              this.eliminarPendientes();
               swal.fire({
                 title: 'Éxito',
-                html: data[0].mensa.trim() || 'Registro guardado con éxito.',
+                html: data[0].mensa.trim(),
                 icon: 'success',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Aceptar',
@@ -442,5 +466,16 @@ export class NuevoTicketComponent implements OnInit {
 
     const exists = this.files.some(f => f.name === file.name && f.size === file.size && f.type === file.type);
     if (!exists) this.files.push(file);
+  }
+  
+  onInputCelular(event: any) {
+    let value = event.target.value.replace(/\D/g, ''); // solo números
+    if (value.length > 3 && value.length <= 6) {
+      value = value.replace(/(\d{3})(\d+)/, '$1-$2');
+    } else if (value.length > 6) {
+      value = value.replace(/(\d{3})(\d{3})(\d+)/, '$1-$2-$3');
+    }
+    event.target.value = value;
+    this.tkt_numcel = value;
   }
 }
