@@ -83,6 +83,7 @@ export class NuevoTicketComponent implements OnInit {
       this.blockinpt = true;
       this.loadData();
     } else {
+      this.tkt_numcel = localStorage.getItem("usu_numcel");
       this.ori_id = 1;
       this.tkt_id = '0';
       this.files = [];
@@ -212,8 +213,8 @@ export class NuevoTicketComponent implements OnInit {
   }
 
   loadTemadeAyuda() {
-    const data_post = { p_tea_id: 0, p_tea_idpadr: 0, p_tea_activo: 1 };
-    this.withLoading(this.api.gettemaayudasel(data_post))
+    const data_post = { /* p_tea_id: 0, p_tea_idpadr: 0, p_tea_activo: 1  */};
+    this.withLoading(this.api.gettemaayudahlp(data_post))
       .subscribe((data: any) => this.dataTemaAyuda = data);
   }
   

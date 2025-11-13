@@ -451,7 +451,7 @@ export class TicketComponent implements OnInit {
       p_tea_activo: 1
     };
 
-    this.api.gettemaayudasel(data_post).subscribe((data: any) => {
+    this.api.gettemaayudahlp(data_post).subscribe((data: any) => {
       this.dataTemaAyuda = data;
     });
   }

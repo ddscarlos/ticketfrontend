@@ -65,7 +65,7 @@ export class ApiService {
     }
   }
 
-//NUEVOS ENDPOINT
+  //NUEVOS ENDPOINT
   getusuariocambiocontrasena(data: object) {
     return this.postQuery("seguridad/cambiarclave", data).pipe(
       map((data) => {

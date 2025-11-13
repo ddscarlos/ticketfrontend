@@ -102,3 +102,7 @@ div#liveScore {
 .dataTables_wrapper .dataTables_filter input {
     margin-right: 12px !important;
 }
+
+.app-menu.navbar-menu {
+    background-color: #f9f9f9;
+}

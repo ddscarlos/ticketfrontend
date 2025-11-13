@@ -63,6 +63,24 @@ export class ModalAsignarComponent implements OnInit {
     this.api.getagentetkt(data_post).subscribe((data: any) => {
       //const currentAgeId = Number(localStorage.getItem("age_id"));
       this.dataAgente = data.filter((agente: any) => agente.age_id !== parseInt(this.age_idtick) && (parseInt(this.age_idtick) > 0 || this.age_idtick !== ''));
+      
+      // Obtener el ID del agente del usuario autenticado
+      const currentUserAgeId = Number(localStorage.getItem("age_id"));
+      
+      // Si el usuario actual es un agente y está disponible en la lista, seleccionarlo automáticamente
+      if (currentUserAgeId && currentUserAgeId > 0) {
+        const agentAvailable = this.dataAgente.find((agente: any) => agente.age_id === currentUserAgeId);
+        if (agentAvailable) {
+          // Asignar numéricamente para coincidir con [value]="item.age_id"
+          this.age_id = agentAvailable.age_id;
+        } else {
+          // Si ya tiene asignado un agente, seleccionarlo en el combo
+          const agenteAsignado = this.dataAgente.find((agente: any) => agente.age_id === parseInt(this.age_idtick));
+          if (agenteAsignado) {
+            this.age_id = agenteAsignado.age_id;
+          }
+        }
+      }
     });
   }
 

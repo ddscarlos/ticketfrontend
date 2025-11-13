@@ -92,10 +92,6 @@ export class NavbarComponent implements OnInit {
       this.errorForm = "Debe completar todos los campos.";
       return false;
     }
-    if (this.contrasenaAnterior.length < 8) {
-      this.errorForm = "La contraseña anterior debe tener al menos 8 caracteres.";
-      return false;
-    }
     if (this.contrasenaNueva.length < 8) {
       this.errorForm = "La nueva contraseña debe tener al menos 8 caracteres.";
       return false;

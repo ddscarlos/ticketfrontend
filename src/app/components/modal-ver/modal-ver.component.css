@@ -8,7 +8,8 @@
     padding: .10rem .6rem;
 }
 .cardobservaciones{
-    height: 140px;
+    height: 191px;
+    max-height: 191px;
 }
 .carddownload{
     height: 200px;
@@ -18,4 +19,27 @@
     background-color: transparent;
     color: #0d6efd;
     border: 1px solid #0d6efd;
+}
+
+.cardobservaciones {
+  max-width: 100%;
+}
+
+.observaciones-scroll {
+  max-height: 120px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.observaciones-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.observaciones-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+::ng-deep .observaciones-scroll p {
+    margin-bottom: 0px;
 }

@@ -25,13 +25,7 @@
       <div class="card">
         <div class="card-body">
           <div class="row">
-            <div class="col-xxl-6 col-md-6">
-              <div>
-                <label for="tkt_asunto" class="form-label">ASUNTO <span class="required">*</span></label>
-                <input type="text" class="form-control form-control-sm" placeholder="INGRESE ASUNTO DEL TICKET" id="tkt_asunto" [ngModel]="tkt_asunto" (ngModelChange)="tkt_asunto = ( $event || '' ).toUpperCase()" pattern="[A-Za-zÀ-ÿ0-9\s\-,.()/#]+"/>
-              </div>
-            </div>
-            <div class="col-xxl-6 col-md-6">
+            <div class="col-xxl-12 col-md-12">
               <div>
                 <label for="tea_id" class="form-label">TEMA DE AYUDA <span class="required">*</span></label>
                 <ng-select class="mayus" [(ngModel)]="tea_id" [disabled]="blockinpt">
@@ -56,7 +50,8 @@
                 <label for="tkt_numcel" class="form-label">NÚMERO DE CELULAR <span class="required">*</span></label>
                 <div class="input-group input-group-sm">
                     <span class="input-group-text" id="tkt_numcel"><i class="ri-phone-fill"></i></span>
-                    <input type="text" class="form-control" placeholder="987-654-321" id="tkt_numcel" [(ngModel)]="tkt_numcel" maxlength="11" (input)="onInputCelular($event)">
+                    <!-- <input type="text" class="form-control" id="tkt_numcel" [(ngModel)]="tkt_numcel" maxlength="11" (input)="onInputCelular($event)"> -->
+                    <input type="text" class="form-control" id="tkt_numcel" [(ngModel)]="tkt_numcel" maxlength="11">
                 </div>
               </div>
             </div>
@@ -73,10 +68,16 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-xxl-12 col-md-6">
+            <div class="col-xxl-12 col-md-12">
               <div>
+                <label for="tkt_asunto" class="form-label">ASUNTO <span class="required">*</span></label>
+                <input type="text" class="form-control form-control-sm" placeholder="INGRESE ASUNTO DEL TICKET" id="tkt_asunto" [ngModel]="tkt_asunto" (ngModelChange)="tkt_asunto = ( $event || '' ).toUpperCase()" pattern="[A-Za-zÀ-ÿ0-9\s\-,.()/#]+"/>
+              </div>
+            </div>
+            <div class="col-xxl-12 col-md-6">
+              <div translate="no">
                 <label for="tkt_observ" class="form-label">OBSERVACIONES</label>
-                <quill-editor [(ngModel)]="tkt_observ" [style]="{height: '150px'}" class="mayus-editor"></quill-editor>
+                <quill-editor lang="es" translate="no" [(ngModel)]="tkt_observ" [style]="{height: '150px'}" class="mayus-editor"></quill-editor>
               </div>
             </div>
           </div>

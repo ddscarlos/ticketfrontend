@@ -27,13 +27,15 @@
             <div class="card card-animate">
                 <div class="card-body classphrag">
                     <p class="text-uppercase fw-medium text-muted text-truncate fs-13 mb-0"><b>ASUNTO :</b> {{ ticket?.tkt_asunto}}</p>
-                    <p class="text-uppercase fw-medium text-muted text-truncate fs-13 mb-0"><b>TEMA DE AYUDA :</b> {{ ticket?.tea_descri}}</p>
+                    <p class="text-uppercase fw-medium text-muted fs-12 mb-0"><b>TEMA DE AYUDA :</b> {{ ticket?.tea_descri}}</p>
                     <p class="text-uppercase fw-medium text-muted text-truncate fs-13 mb-0"><b>CELULAR :</b> {{ ticket?.tkt_numcel}}</p>
                     <p class="text-uppercase fw-medium text-muted text-truncate fs-13 mb-0"><b>AGENTE ASIGNADO :</b> {{ ticket?.age_nomcom}}</p>
                     <p class="text-uppercase fw-medium text-muted text-truncate fs-13 mb-0"><b>ESTADO : </b> <span class="badge text-white" [ngStyle]="{'background-color': ticket.est_colors}"> {{ticket.est_descri}} </span></p>
                     <p class="text-uppercase fw-medium text-muted text-truncate fs-13 mb-0"><b>PRIORIDAD : </b> <span class="badge text-white" [ngStyle]="{'background-color': ticket.pri_colors}"> {{ticket.pri_descri}} </span></p>
                     <p class="text-uppercase fw-medium text-muted text-truncate fs-13 mb-0"><b>FECHA :</b> {{ ticket?.tkt_fectkt}}</p>
                     <p class="text-uppercase fw-medium text-muted text-truncate fs-13 mb-0"><b>HORA :</b> {{ ticket?.tkt_hortkt}}</p>
+                    <p class="text-uppercase fw-medium text-muted text-truncate fs-13 mb-0"><b>USUARIO SOLICITANTE :</b> {{ ticket?.usu_nomcom}}</p>
+                    <p class="text-uppercase fw-medium text-muted text-truncate fs-13 mb-0" *ngIf="ticket?.ard_id > 0"><b>DEPENDENCIA :</b> {{ ticket?.ard_descri}}</p>
                 </div>
             </div>
         </div>
@@ -71,7 +73,7 @@
                     <div class="cheadver">
                         <p class="text-uppercase fw-medium text-muted text-truncate fs-13 mb-0"><b>OBSERVACIONES:</b></p>
                     </div>
-                    <div class="text-muted">
+                    <div class="text-muted observaciones-scroll">
                         <p class="text-muted mb-0 fs-12" [innerHTML]="ticket?.tkt_observ"></p>
                     </div>
                 </div>
